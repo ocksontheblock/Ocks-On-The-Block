@@ -50,7 +50,7 @@ export default function FeaturedOcks() {
                 alt={`${ock.name} Character`}
                 className="w-full h-48 object-cover rounded-lg mb-4"
                 style={{ 
-                  objectPosition: ock.name === "Mister Hearti" ? "center top" : "center"
+                  objectPosition: ock.name === "Mister Hearti" ? "center 15%" : "center"
                 }}
               />
               <h3 className="font-anton text-xl mb-2 text-gray-900">
