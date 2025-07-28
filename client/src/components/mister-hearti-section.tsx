@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const featuredOcks = [
   {
     id: 1,
     name: "Mister Hearti",
     bio: "While the block moves loud, Mister Hearti moves steady — always there, always real. He don't just run the store — he holds the corner with heart.",
-    image: "mister-hearti.jpg"
+    image: "mister-hearti.jpg",
+    objectPosition: "center top"
   },
   {
     id: 2,
@@ -36,6 +37,8 @@ const featuredOcks = [
 export default function MisterHeartiSection() {
   const [currentOckIndex, setCurrentOckIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const touchStartRef = useRef<number>(0);
+  const touchEndRef = useRef<number>(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,6 +56,69 @@ export default function MisterHeartiSection() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentOckIndex((prevIndex) => 
+            prevIndex === 0 ? featuredOcks.length - 1 : prevIndex - 1
+          );
+          setIsTransitioning(false);
+        }, 300);
+      } else if (e.key === 'ArrowRight') {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setCurrentOckIndex((prevIndex) => 
+            (prevIndex + 1) % featuredOcks.length
+          );
+          setIsTransitioning(false);
+        }, 300);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndRef.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartRef.current || !touchEndRef.current) return;
+    
+    const distance = touchStartRef.current - touchEndRef.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      // Swipe left - next slide
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentOckIndex((prevIndex) => 
+          (prevIndex + 1) % featuredOcks.length
+        );
+        setIsTransitioning(false);
+      }, 300);
+    }
+
+    if (isRightSwipe) {
+      // Swipe right - previous slide
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentOckIndex((prevIndex) => 
+          prevIndex === 0 ? featuredOcks.length - 1 : prevIndex - 1
+        );
+        setIsTransitioning(false);
+      }, 300);
+    }
+  };
+
   const currentOck = featuredOcks[currentOckIndex];
 
   return (
@@ -63,11 +129,21 @@ export default function MisterHeartiSection() {
           Featured Ocks
         </h2>
         
-        <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'}`}>
+        <div 
+          className={`transition-all duration-300 select-none ${isTransitioning ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'}`}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <img 
             src={currentOck.image}
             alt={currentOck.name} 
             className="w-full max-w-2xl mx-auto h-96 object-cover rounded-2xl shadow-2xl mb-6"
+            style={{ 
+              objectPosition: currentOck.objectPosition || 'center',
+              userSelect: 'none',
+              WebkitUserSelect: 'none'
+            }}
           />
           
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-ock-orange font-anton">
@@ -80,12 +156,18 @@ export default function MisterHeartiSection() {
           </p>
         </div>
         
-        {/* Slide indicators */}
+        {/* Slide indicators and instructions */}
         <div className="flex justify-center space-x-2 mt-8">
           {featuredOcks.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentOckIndex(index)}
+              onClick={() => {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentOckIndex(index);
+                  setIsTransitioning(false);
+                }, 300);
+              }}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentOckIndex 
                   ? 'bg-ock-orange scale-125' 
@@ -94,6 +176,10 @@ export default function MisterHeartiSection() {
             />
           ))}
         </div>
+        
+        <p className="text-sm text-gray-500 text-center mt-4">
+          Swipe left/right or use arrow keys to navigate • Auto-advances every 6.5 seconds
+        </p>
       </div>
     </section>
   );
