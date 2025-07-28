@@ -48,7 +48,7 @@ export default function MisterHeartiSection() {
         setIsTransitioning(false);
       }, 300); // Transition duration
       
-    }, 5000); // 5 seconds per slide
+    }, 6500); // 6.5 seconds per slide
 
     return () => clearInterval(interval);
   }, []);
