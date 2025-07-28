@@ -1,14 +1,14 @@
+import DripSection from "@/components/drip-section";
 import HamburgerMenu from "@/components/hamburger-menu";
-import LogoSection from "@/components/logo-section";
-import MisterHeartiSection from "@/components/mister-hearti-section";
 import Footer from "@/components/footer";
 
-export default function Home() {
+export default function OckyDrip() {
   return (
     <div className="min-h-screen bg-white">
       <HamburgerMenu />
-      <LogoSection />
-      <MisterHeartiSection />
+      <div className="pt-20">
+        <DripSection />
+      </div>
       <Footer />
     </div>
   );

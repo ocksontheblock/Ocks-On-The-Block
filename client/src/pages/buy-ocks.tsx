@@ -1,14 +1,14 @@
+import FeaturedOcks from "@/components/featured-ocks";
 import HamburgerMenu from "@/components/hamburger-menu";
-import LogoSection from "@/components/logo-section";
-import MisterHeartiSection from "@/components/mister-hearti-section";
 import Footer from "@/components/footer";
 
-export default function Home() {
+export default function BuyOcks() {
   return (
     <div className="min-h-screen bg-white">
       <HamburgerMenu />
-      <LogoSection />
-      <MisterHeartiSection />
+      <div className="pt-20">
+        <FeaturedOcks />
+      </div>
       <Footer />
     </div>
   );

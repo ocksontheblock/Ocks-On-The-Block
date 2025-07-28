@@ -1,9 +1,10 @@
+import { useLocation } from "wouter";
+
 export default function HeroSection() {
+  const [, setLocation] = useLocation();
+  
   const handleShopClick = () => {
-    const element = document.querySelector('#buy');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    setLocation('/buy-ocks');
   };
 
   return (
@@ -28,7 +29,7 @@ export default function HeroSection() {
           onClick={handleShopClick}
           className="inline-block bg-ock-orange hover:bg-ock-orange/90 text-white font-bold py-4 px-8 rounded-lg text-lg md:text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
         >
-          Shop the Drop
+          Buy Now
         </button>
       </div>
     </header>
