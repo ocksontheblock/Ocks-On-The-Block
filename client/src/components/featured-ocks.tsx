@@ -4,7 +4,7 @@ export default function FeaturedOcks() {
       id: 1,
       name: "Mister Hearti",
       description: "The original. Heart of the block. Gives game, wraps love.",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=400&h=400"
+      image: "mister-hearti.jpg"
     },
     {
       id: 2,
@@ -49,6 +49,9 @@ export default function FeaturedOcks() {
                 src={ock.image}
                 alt={`${ock.name} Character`}
                 className="w-full h-48 object-cover rounded-lg mb-4"
+                style={{ 
+                  objectPosition: ock.name === "Mister Hearti" ? "center top" : "center"
+                }}
               />
               <h3 className="font-anton text-xl mb-2 text-gray-900">
                 {ock.name}
