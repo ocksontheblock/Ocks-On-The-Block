@@ -67,7 +67,7 @@ export default function MisterHeartiSection() {
           <img 
             src={currentOck.image}
             alt={currentOck.name} 
-            className="w-full rounded-2xl shadow-2xl mb-6"
+            className="w-full max-w-2xl mx-auto h-96 object-cover rounded-2xl shadow-2xl mb-6"
           />
           
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-ock-orange font-anton">

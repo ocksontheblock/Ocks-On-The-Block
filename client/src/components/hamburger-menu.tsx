@@ -1,17 +1,16 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleLinkClick = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleLinkClick = (path: string) => {
+    setLocation(path);
     setIsOpen(false);
   };
 
@@ -47,25 +46,25 @@ export default function HamburgerMenu() {
       >
         <div className="menu-content text-center">
           <button
-            onClick={() => handleLinkClick('#home')}
+            onClick={() => handleLinkClick('/')}
             className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
           >
             Home
           </button>
           <button
-            onClick={() => handleLinkClick('#drip')}
+            onClick={() => handleLinkClick('/ocky-drip')}
             className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
           >
             Ocky Drip
           </button>
           <button
-            onClick={() => handleLinkClick('#buy')}
+            onClick={() => handleLinkClick('/buy-ocks')}
             className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
           >
             Buy the Ocks
           </button>
           <button
-            onClick={() => handleLinkClick('#map')}
+            onClick={() => handleLinkClick('/ocky-map')}
             className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
           >
             The Ocky Map
