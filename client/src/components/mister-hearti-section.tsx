@@ -138,9 +138,9 @@ export default function MisterHeartiSection() {
   const currentOck = featuredOcks[currentOckIndex];
 
   return (
-    <section id="mister-hearti" className="bg-gray-50 py-16 px-4 md:px-8">
+    <section id="mister-hearti" className="bg-white py-12 px-4 md:px-8">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900" 
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900" 
             style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
           Featured Ocks
         </h2>
@@ -194,8 +194,8 @@ export default function MisterHeartiSection() {
           ))}
         </div>
         
-        <p className="text-sm text-gray-500 text-center mt-4">
-          Swipe left/right or use arrow keys to navigate • Auto-advances every 6.5 seconds
+        <p className="text-xs text-gray-400 text-center mt-3">
+          Swipe or use arrow keys • Auto-advances every 6.5 seconds
         </p>
       </div>
     </section>
