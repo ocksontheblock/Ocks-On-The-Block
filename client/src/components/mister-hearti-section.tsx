@@ -5,7 +5,7 @@ const featuredOcks = [
     id: 1,
     name: "Mister Hearti",
     bio: "While the block moves loud, Mister Hearti moves steady — always there, always real. He don't just run the store — he holds the corner with heart.",
-    image: "mister-hearti.jpg",
+    image: "/mister-hearti.jpg",
     objectPosition: "center top"
   },
   {
