@@ -39,9 +39,14 @@ export default function MisterHeartiSection() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const touchStartRef = useRef<number>(0);
   const touchEndRef = useRef<number>(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startAutoAdvance = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    intervalRef.current = setInterval(() => {
       setIsTransitioning(true);
       
       setTimeout(() => {
@@ -49,11 +54,18 @@ export default function MisterHeartiSection() {
           (prevIndex + 1) % featuredOcks.length
         );
         setIsTransitioning(false);
-      }, 300); // Transition duration
+      }, 300);
       
     }, 6500); // 6.5 seconds per slide
+  };
 
-    return () => clearInterval(interval);
+  useEffect(() => {
+    startAutoAdvance();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -66,6 +78,7 @@ export default function MisterHeartiSection() {
           );
           setIsTransitioning(false);
         }, 300);
+        startAutoAdvance(); // Restart timer
       } else if (e.key === 'ArrowRight') {
         setIsTransitioning(true);
         setTimeout(() => {
@@ -74,6 +87,7 @@ export default function MisterHeartiSection() {
           );
           setIsTransitioning(false);
         }, 300);
+        startAutoAdvance(); // Restart timer
       }
     };
 
@@ -105,6 +119,7 @@ export default function MisterHeartiSection() {
         );
         setIsTransitioning(false);
       }, 300);
+      startAutoAdvance(); // Restart timer
     }
 
     if (isRightSwipe) {
@@ -116,6 +131,7 @@ export default function MisterHeartiSection() {
         );
         setIsTransitioning(false);
       }, 300);
+      startAutoAdvance(); // Restart timer
     }
   };
 
@@ -167,6 +183,7 @@ export default function MisterHeartiSection() {
                   setCurrentOckIndex(index);
                   setIsTransitioning(false);
                 }, 300);
+                startAutoAdvance(); // Restart timer
               }}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 index === currentOckIndex 
