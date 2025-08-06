@@ -17,9 +17,7 @@ export default function HamburgerMenu() {
   return (
     <nav className="fixed top-0 left-0 w-full z-50">
       <div 
-        className={`hamburger fixed top-5 left-5 z-[999] cursor-pointer transition-all duration-300 ${
-          window.scrollY > 100 ? 'bg-black bg-opacity-80 p-2 rounded-lg' : ''
-        }`}
+        className="hamburger fixed top-5 left-5 z-[999] cursor-pointer transition-all duration-300 bg-black bg-opacity-70 p-3 rounded-lg backdrop-blur-sm border border-white border-opacity-20"
         onClick={toggleMenu}
       >
         <span 

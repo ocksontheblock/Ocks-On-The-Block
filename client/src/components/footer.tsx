@@ -32,13 +32,7 @@ export default function Footer() {
           >
             TikTok
           </a>
-          <span className="hidden md:inline text-gray-600">|</span>
-          <a 
-            href="#"
-            className="text-gray-300 hover:text-ock-orange transition-colors duration-300"
-          >
-            Twitter
-          </a>
+
         </div>
         
         <div className="border-t border-gray-800 pt-6">
