@@ -7,6 +7,8 @@
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design preferences: More fluid, less space, more professional layout.
+Tagline placement: "Rep Your Ock. Wear Your Block." moved to Ocky Drip page.
 
 ## System Architecture
 

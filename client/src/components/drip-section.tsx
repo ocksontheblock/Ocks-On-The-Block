@@ -23,20 +23,20 @@ export default function DripSection() {
   ];
 
   return (
-    <section className="drip-section bg-gray-900 text-white py-20 px-4 md:px-8" id="drip">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="font-anton text-4xl md:text-5xl mb-8">
-          Ocky Drip
+    <section className="drip-section bg-gray-900 text-white py-12 px-4 md:px-8" id="drip">
+      <div className="max-w-6xl mx-auto text-center">
+        <h2 className="font-anton text-3xl md:text-4xl mb-4">
+          The Collection
         </h2>
-        <p className="text-lg md:text-xl leading-relaxed mb-12">
+        <p className="text-base md:text-lg leading-relaxed mb-8 max-w-3xl mx-auto">
           Exclusive drops coming soon. From corner tees to bobble-head heat, rep your favorite Ock loud.
         </p>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {merchandise.map((item) => (
             <div 
               key={item.id}
-              className="aspect-square bg-gray-800 rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300"
+              className="aspect-square bg-gray-800 rounded-lg overflow-hidden hover:scale-105 transition-transform duration-300 shadow-lg"
             >
               <img 
                 src={item.image}
