@@ -50,6 +50,12 @@ export default function HamburgerMenu() {
             Home
           </button>
           <button
+            onClick={() => handleLinkClick('/about')}
+            className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
+          >
+            About
+          </button>
+          <button
             onClick={() => handleLinkClick('/ocky-drip')}
             className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
           >
