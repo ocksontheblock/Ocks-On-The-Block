@@ -180,12 +180,18 @@ export default function MisterHeartiSection() {
                 <img 
                   src={currentOck.image}
                   alt={currentOck.name} 
-                  className="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl"
+                  className="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl pointer-events-none select-none"
                   style={{ 
                     objectPosition: currentOck.objectPosition || 'center',
                     userSelect: 'none',
-                    WebkitUserSelect: 'none'
+                    WebkitUserSelect: 'none',
+                    WebkitUserDrag: 'none',
+
+                    WebkitTouchCallout: 'none'
                   }}
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
                   onError={(e) => {
                     console.log('Image failed to load:', currentOck.image);
                     // Use the new Hearti image
