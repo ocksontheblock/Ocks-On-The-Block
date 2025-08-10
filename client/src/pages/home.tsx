@@ -22,16 +22,59 @@ export default function Home() {
       <HamburgerMenu />
       
       {/* Hero Section with Logo */}
-      <section className="min-h-screen flex items-center justify-center bg-white px-4">
-        <div className="text-center max-w-4xl mx-auto">
-          <img 
-            src={logoPath} 
-            alt="Ocks on the Block - Ockwear for Everywhere" 
-            className="mx-auto mb-8 max-w-md w-full h-auto"
-          />
-          <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Celebrating the heartbeat of NYC corner stores through authentic street culture
-          </p>
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50 px-4 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-ock-orange/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-green-500/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="text-center max-w-5xl mx-auto relative z-10">
+          <div className="mb-12">
+            <img 
+              src={logoPath} 
+              alt="Ocks on the Block - Ockwear for Everywhere" 
+              className="mx-auto mb-8 max-w-lg w-full h-auto drop-shadow-2xl"
+            />
+          </div>
+          
+          <div className="space-y-6 mb-12">
+            <p className="text-2xl md:text-3xl text-gray-700 font-light max-w-3xl mx-auto leading-relaxed">
+              Celebrating the heartbeat of NYC corner stores through authentic street culture
+            </p>
+            <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-ock-orange rounded-full"></div>
+                <span>Authentic NYC Culture</span>
+              </div>
+              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span>Corner Store Legends</span>
+              </div>
+              <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>Street Culture</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <button 
+              onClick={() => document.getElementById('mister-hearti')?.scrollIntoView({ behavior: 'smooth' })}
+              className="bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-2xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              Meet the Ocks
+            </button>
+            <button 
+              onClick={() => window.location.href = '/buy-ocks'}
+              className="bg-white text-ock-orange py-4 px-8 rounded-2xl font-bold border-2 border-ock-orange hover:bg-ock-orange hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              Shop Collection
+            </button>
+          </div>
         </div>
       </section>
 

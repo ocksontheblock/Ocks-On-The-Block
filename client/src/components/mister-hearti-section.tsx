@@ -5,7 +5,7 @@ const featuredOcks = [
     id: 1,
     name: "Mister Hearti",
     bio: "While the block moves loud, Mister Hearti moves steady — always there, always real. He don't just run the store — he holds the corner with heart.",
-    image: "/mister-hearti.jpg",
+    image: "./mister-hearti.jpg",
     objectPosition: "center top"
   },
   {
@@ -138,38 +138,65 @@ export default function MisterHeartiSection() {
   const currentOck = featuredOcks[currentOckIndex];
 
   return (
-    <section id="mister-hearti" className="bg-white py-12 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900" 
-            style={{ fontFamily: "'Helvetica Neue', sans-serif" }}>
-          Featured Ocks
-        </h2>
+    <section id="mister-hearti" className="bg-gradient-to-br from-gray-50 to-white py-16 px-4 md:px-8">
+      <div className="max-w-6xl mx-auto text-center">
+        <div className="mb-12">
+          <h2 className="font-anton text-4xl md:text-6xl mb-6 text-gray-900">
+            Featured Ocks
+          </h2>
+          <p className="text-xl md:text-2xl text-ock-orange font-semibold mb-4">
+            Meet the legends behind the counter
+          </p>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            These are the real ones who make NYC corner stores more than just places to shop — they're the heartbeat of the neighborhood.
+          </p>
+        </div>
         
         <div 
-          className={`transition-all duration-300 select-none ${isTransitioning ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'}`}
+          className={`transition-all duration-500 select-none ${isTransitioning ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'}`}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          <img 
-            src={currentOck.image}
-            alt={currentOck.name} 
-            className="w-full max-w-2xl mx-auto h-96 object-cover rounded-2xl shadow-2xl mb-6"
-            style={{ 
-              objectPosition: currentOck.objectPosition || 'center',
-              userSelect: 'none',
-              WebkitUserSelect: 'none'
-            }}
-          />
-          
-          <h3 className="text-2xl md:text-3xl font-bold mb-4 text-ock-orange font-anton">
-            {currentOck.name}
-          </h3>
-          
-          <p className="text-lg md:text-xl leading-relaxed text-gray-700" 
-             style={{ fontFamily: "'Georgia', serif" }}>
-            {currentOck.bio}
-          </p>
+          <div className="bg-white rounded-3xl shadow-2xl p-8 mb-8 max-w-4xl mx-auto border border-gray-100">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="order-2 md:order-1 text-left">
+                <h3 className="text-3xl md:text-4xl font-anton mb-6 text-ock-orange">
+                  {currentOck.name}
+                </h3>
+                <p className="text-lg md:text-xl leading-relaxed text-gray-700 mb-6" 
+                   style={{ fontFamily: "'Georgia', serif" }}>
+                  {currentOck.bio}
+                </p>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-ock-orange rounded-full"></div>
+                  <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Corner Store Legend
+                  </span>
+                </div>
+              </div>
+              
+              <div className="order-1 md:order-2">
+                <img 
+                  src={currentOck.image}
+                  alt={currentOck.name} 
+                  className="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl"
+                  style={{ 
+                    objectPosition: currentOck.objectPosition || 'center',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none'
+                  }}
+                  onError={(e) => {
+                    console.log('Image failed to load:', currentOck.image);
+                    // Keep the original image path for Mister Hearti
+                    if (currentOck.name === "Mister Hearti") {
+                      e.currentTarget.src = "/mister-hearti.jpg";
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         
         {/* Slide indicators and instructions */}
