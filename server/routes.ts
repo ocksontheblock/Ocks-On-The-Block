@@ -16,7 +16,7 @@ import {
   insertEmailSignupSchema,
   loginUserSchema
 } from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -133,12 +133,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cartData = insertCartItemSchema.parse(req.body);
       
       // Check if item already in cart
-      const existingItems = await db
+      const [existingItem] = await db
         .select()
         .from(cartItems)
-        .where(eq(cartItems.userId, cartData.userId!));
-      
-      const existingItem = existingItems.find(item => item.mysteryBoxId === cartData.mysteryBoxId);
+        .where(and(
+          eq(cartItems.userId, cartData.userId!),
+          eq(cartItems.mysteryBoxId, cartData.mysteryBoxId!)
+        ));
       
       if (existingItem) {
         // Update quantity
