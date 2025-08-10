@@ -5,7 +5,7 @@ const featuredOcks = [
     id: 1,
     name: "Mister Hearti",
     bio: "While the block moves loud, Mister Hearti moves steady — always there, always real. He don't just run the store — he holds the corner with heart.",
-    image: "./mister-hearti.jpg",
+    image: "/hearti-new.png",
     objectPosition: "center top"
   },
   {
@@ -188,9 +188,9 @@ export default function MisterHeartiSection() {
                   }}
                   onError={(e) => {
                     console.log('Image failed to load:', currentOck.image);
-                    // Keep the original image path for Mister Hearti
+                    // Use the new Hearti image
                     if (currentOck.name === "Mister Hearti") {
-                      e.currentTarget.src = "/mister-hearti.jpg";
+                      e.currentTarget.src = "/hearti-new.png";
                     }
                   }}
                 />
