@@ -64,7 +64,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
             <button 
               onClick={() => document.getElementById('mister-hearti')?.scrollIntoView({ behavior: 'smooth' })}
-              className="bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-2xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="bg-ock-orange text-white py-4 px-8 rounded-2xl font-bold hover:bg-red-500 transition-all duration-300 transform hover:scale-105 shadow-lg active:bg-red-600"
             >
               Meet the Ocks
             </button>
