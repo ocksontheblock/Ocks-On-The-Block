@@ -6,7 +6,7 @@ export default function OckyMap() {
   return (
     <div className="min-h-screen bg-white">
       <HamburgerMenu />
-      <div className="pt-20">
+      <div className="pt-16">
         <MapSection />
       </div>
       <Footer />
