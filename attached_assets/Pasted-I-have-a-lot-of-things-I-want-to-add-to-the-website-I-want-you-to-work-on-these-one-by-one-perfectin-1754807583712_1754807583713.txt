@@ -1,0 +1,37 @@
+I have a lot of things I want to add to the website I want you to work on these one by one perfecting each one and then go on to the next. 
+
+I want to add customer log ins with the option of an email signup pop-up so that they can get first drop alerts and limited time drops. Add a my cart where customers can add products into before a final checkout. 
+Can you also add an about section and move the ock organs from the main page to the about page. I have things I wrote down but I want you to sum it up and fix it up with professionalism and simplicity, while still making it an interesting and fun read. Here’s my notes 
+
+About Ocks on the Block – Summary
+	1.	Intro Hook
+	•	Explain that Ocks on the Block is more than collectibles — it’s a tribute to the deli workers (“Ocks”) who keep NYC fed, connected, and moving.
+	•	Emphasize it’s about culture, community, and authenticity.
+	2.	Origins of “Ock”
+	•	“Ock” comes from “akhi,” meaning “my brother” in Arabic.
+	•	Became NYC slang for the friendly deli guy who knows your order before you even speak.
+	3.	Timeline of the Culture
+	•	1980s – Corner delis and bodegas become neighborhood hubs, run by hardworking immigrant families.
+	•	1990s–2000s – The nickname “Ock” spreads through the city’s slang and street culture.
+	•	2010s – Ocks and bodega life blow up in music, memes, and streetwear culture.
+	•	Today – Ocks on the Block turns that real energy into collectible figurines, merch, and a living map of the real Ocks.
+	5.	Closing Line
+	•	it’s not just “Respect the Ock. Collect the block.”
+
+Can we try to add an animation while the website loads? Also Mister hearti is still not showing on vercel what is going on. Speaking of the mister hearti picture. 
+
+It is also time to start protecting my brand, can you make me a copyright footer that can protect my brand. 
+
+Also can you add Not just a figure — a piece of the block. with a nice color theme in the buy the ock section also for that section I’m leaning towards the idea of not selling by specific ocks but rather a mystery box that contains one of the featured ocks. And I’m working on setting up different mystery boxes and the name for them but here is what I have so far 
+
+$29 – Tier 1
+Ocky Drop: Classic – the everyday pull, random but always fresh.
+
+$49 – Tier 2
+Ocky Drop: Heat – higher odds, hotter pulls from the block.
+
+$89 – Tier 3
+Ocky Drop: Lock – you lock in your exact Ock, no gamble.
+
+$149 – Tier 4
+Ocky Drop: Crown – the top-shelf drop, rare Ock + exclusive drip.

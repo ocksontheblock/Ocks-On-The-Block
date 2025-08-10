@@ -9,6 +9,9 @@
 Preferred communication style: Simple, everyday language.
 Design preferences: More fluid, less space, more professional layout.
 Tagline placement: "Rep Your Ock. Wear Your Block." moved to Ocky Drip page.
+Authentication: Email-based user system with signup alerts for drops.
+Mystery boxes: Four tiers ($29, $49, $89, $149) instead of individual Ock sales.
+Brand protection: Comprehensive copyright footer implemented.
 
 ## System Architecture
 
