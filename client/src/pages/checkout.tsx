@@ -108,14 +108,23 @@ const CheckoutForm = ({ mysteryBox, user }: { mysteryBox: any; user: any }) => {
 
         <div className="p-8">
           {/* Customer Info */}
-          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+          <div className={`${user ? 'bg-green-50 border-green-200' : 'bg-blue-50 border-blue-200'} border rounded-xl p-4 mb-6`}>
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+              <div className={`w-8 h-8 ${user ? 'bg-green-500' : 'bg-blue-500'} rounded-full flex items-center justify-center`}>
                 <span className="text-white text-sm">✓</span>
               </div>
               <div>
-                <p className="font-semibold text-green-800">Signed in as</p>
-                <p className="text-green-700">{user?.email}</p>
+                <p className={`font-semibold ${user ? 'text-green-800' : 'text-blue-800'}`}>
+                  {user ? 'Signed in as' : 'Guest Checkout'}
+                </p>
+                <p className={`${user ? 'text-green-700' : 'text-blue-700'}`}>
+                  {user ? user.email : 'Proceeding as guest customer'}
+                </p>
+                {!user && (
+                  <p className="text-blue-600 text-sm mt-1">
+                    No account required, but you can sign in anytime for order tracking
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -222,19 +231,11 @@ export default function Checkout() {
   const [mysteryBox, setMysteryBox] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isGuestCheckout, setIsGuestCheckout] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user is logged in
-    const storedUser = localStorage.getItem('ocks_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-      setShowAuthModal(true);
-      return;
-    }
-
-    // Get mystery box info from URL params
+    // Get mystery box info from URL params first
     const params = new URLSearchParams(window.location.search);
     const boxId = params.get('box');
     const amount = params.get('amount');
@@ -252,28 +253,51 @@ export default function Checkout() {
 
     setMysteryBox({ id: boxId, price: parseFloat(amount), name: name, description: description });
 
-    // Create PaymentIntent
-    apiRequest("POST", "/api/create-payment-intent", { 
-      amount: parseFloat(amount),
-      currency: 'usd',
-      metadata: { boxId, name, userEmail: user?.email }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setClientSecret(data.clientSecret);
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('ocks_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else if (!isGuestCheckout) {
+      setShowAuthModal(true);
+      return;
+    }
+  }, [toast, isGuestCheckout]);
+
+  useEffect(() => {
+    // Create PaymentIntent when we have the mystery box and either user or guest checkout
+    if (mysteryBox && (user || isGuestCheckout)) {
+      apiRequest("POST", "/api/create-payment-intent", { 
+        amount: mysteryBox.price,
+        currency: 'usd',
+        metadata: { 
+          boxId: mysteryBox.id, 
+          name: mysteryBox.name, 
+          userEmail: user?.email || 'guest',
+          checkoutType: user ? 'authenticated' : 'guest'
+        }
       })
-      .catch((error) => {
-        toast({
-          title: "Error",
-          description: "Failed to initialize payment",
-          variant: "destructive",
+        .then((res) => res.json())
+        .then((data) => {
+          setClientSecret(data.clientSecret);
+        })
+        .catch((error) => {
+          toast({
+            title: "Error",
+            description: "Failed to initialize payment",
+            variant: "destructive",
+          });
         });
-      });
-  }, [toast, user]);
+    }
+  }, [mysteryBox, user, isGuestCheckout, toast]);
 
   const handleAuthSuccess = (userData: any) => {
     localStorage.setItem('ocks_user', JSON.stringify(userData));
     setUser(userData);
+    setShowAuthModal(false);
+  };
+
+  const handleGuestCheckout = () => {
+    setIsGuestCheckout(true);
     setShowAuthModal(false);
   };
 
@@ -285,14 +309,35 @@ export default function Checkout() {
             <Lock className="w-16 h-16 text-ock-orange mx-auto mb-6" />
             <h1 className="font-anton text-3xl text-gray-900 mb-4">Sign In Required</h1>
             <p className="text-lg text-gray-600 mb-8">
-              Please sign in to your account to complete your purchase securely.
+              Choose how you'd like to complete your secure purchase.
             </p>
-            <button
-              onClick={() => setShowAuthModal(true)}
-              className="bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300"
-            >
-              Sign In to Continue
-            </button>
+            <div className="space-y-4">
+              <button
+                onClick={() => setShowAuthModal(true)}
+                className="w-full bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300"
+                data-testid="button-sign-in"
+              >
+                Sign In to Your Account
+              </button>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-gray-500">or</span>
+                </div>
+              </div>
+              <button
+                onClick={handleGuestCheckout}
+                className="w-full bg-white border-2 border-gray-300 text-gray-700 py-4 px-8 rounded-xl font-bold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300"
+                data-testid="button-guest-checkout"
+              >
+                Continue as Guest
+              </button>
+              <p className="text-sm text-gray-500 text-center">
+                Guest checkout is secure and fast. Create an account later for order tracking.
+              </p>
+            </div>
           </div>
         </div>
         <AuthModal 
@@ -304,7 +349,7 @@ export default function Checkout() {
     );
   }
 
-  if (!clientSecret || !mysteryBox || !user) {
+  if (!clientSecret || !mysteryBox || (!user && !isGuestCheckout)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">

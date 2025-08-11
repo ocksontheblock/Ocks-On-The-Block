@@ -197,7 +197,7 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
             }
           </button>
 
-          <div className="text-center pt-4">
+          <div className="text-center pt-4 space-y-3">
             <p className="text-gray-600">
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
@@ -209,6 +209,19 @@ export default function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
             </p>
+            <div className="border-t pt-3">
+              <p className="text-sm text-gray-500 mb-2">
+                Want to checkout quickly?
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                data-testid="button-close-to-guest"
+              >
+                Continue as Guest instead
+              </button>
+            </div>
           </div>
         </form>
       </div>
