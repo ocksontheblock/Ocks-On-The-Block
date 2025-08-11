@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "./db";
+import Stripe from "stripe";
 import { 
   users, 
   mysteryBoxes, 
@@ -18,6 +19,13 @@ import {
 } from "@shared/schema";
 import { eq, and } from "drizzle-orm";
 import bcrypt from "bcrypt";
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Email signup route
@@ -166,6 +174,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     } catch (error) {
       res.status(400).json({ error: "Invalid cart item ID" });
+    }
+  });
+
+  // Stripe payment route for mystery boxes
+  app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+      const { amount, currency = 'usd', metadata = {} } = req.body;
+      
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ error: "Invalid amount" });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency,
+        metadata: {
+          ...metadata,
+          source: 'ocks-mystery-boxes'
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error: any) {
+      console.error('Stripe payment error:', error);
+      res.status(500).json({ 
+        error: "Error creating payment intent",
+        message: error.message 
+      });
     }
   });
 

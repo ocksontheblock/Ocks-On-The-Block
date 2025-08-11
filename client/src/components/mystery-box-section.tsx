@@ -87,10 +87,19 @@ export default function MysteryBoxSection() {
                     ${box.price}
                   </span>
                   <button 
+                    onClick={() => {
+                      const params = new URLSearchParams({
+                        box: box.id.toString(),
+                        amount: box.price.toString(),
+                        name: box.name,
+                        description: box.description
+                      });
+                      window.location.href = `/checkout?${params.toString()}`;
+                    }}
                     className="bg-ock-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200"
-                    data-testid={`button-add-to-cart-${box.id}`}
+                    data-testid={`button-buy-${box.name.toLowerCase().replace(/\s+/g, '-')}`}
                   >
-                    Add to Cart
+                    Buy Now
                   </button>
                 </div>
               </div>
