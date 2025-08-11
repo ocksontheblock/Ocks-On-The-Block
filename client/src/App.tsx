@@ -11,6 +11,8 @@ import About from "@/pages/about";
 import OckyDrip from "@/pages/ocky-drip";
 import OckyMap from "@/pages/ocky-map";
 import BuyOcks from "@/pages/buy-ocks";
+import Checkout from "@/pages/checkout";
+import PaymentSuccess from "@/pages/payment-success";
 
 function Router() {
   return (
@@ -20,6 +22,8 @@ function Router() {
       <Route path="/ocky-drip" component={OckyDrip} />
       <Route path="/ocky-map" component={OckyMap} />
       <Route path="/buy-ocks" component={BuyOcks} />
+      <Route path="/checkout" component={Checkout} />
+      <Route path="/payment-success" component={PaymentSuccess} />
       <Route component={NotFound} />
     </Switch>
   );
