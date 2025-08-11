@@ -96,7 +96,7 @@ export default function MysteryBoxSection() {
                       });
                       window.location.href = `/checkout?${params.toString()}`;
                     }}
-                    className="bg-ock-orange hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors duration-200"
+                    className="bg-gradient-to-r from-ock-orange to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-red-500 hover:to-ock-orange transition-all duration-300 transform hover:scale-105 shadow-lg"
                     data-testid={`button-buy-${box.name.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     Buy Now

@@ -177,6 +177,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Authentication routes
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const userData = insertUserSchema.parse(req.body);
+      
+      // Check if user already exists
+      const [existingUser] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, userData.email));
+      
+      if (existingUser) {
+        return res.status(409).json({ error: "User already exists" });
+      }
+      
+      // Hash password
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      
+      const [user] = await db
+        .insert(users)
+        .values({ ...userData, password: hashedPassword })
+        .returning();
+      
+      res.json({ user: { ...user, password: undefined } });
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(400).json({ error: "Invalid registration data" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const loginData = loginUserSchema.parse(req.body);
+      
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, loginData.email));
+      
+      if (!user || !await bcrypt.compare(loginData.password, user.password)) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      res.json({ user: { ...user, password: undefined } });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(400).json({ error: "Invalid login data" });
+    }
+  });
+
   // Stripe payment route for mystery boxes
   app.post("/api/create-payment-intent", async (req, res) => {
     try {
