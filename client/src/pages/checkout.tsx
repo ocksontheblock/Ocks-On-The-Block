@@ -1,9 +1,11 @@
-import { useStripe, Elements, PaymentElement, useElements } from '@stripe/react-stripe-js';
+import { useStripe, Elements, PaymentElement, useElements, PaymentRequestButtonElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from 'wouter';
+import { Lock, CreditCard, Smartphone } from 'lucide-react';
+import AuthModal from '@/components/auth-modal';
 
 // Make sure to call `loadStripe` outside of a component's render to avoid
 // recreating the `Stripe` object on every render.
@@ -12,12 +14,54 @@ if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
 }
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const CheckoutForm = ({ mysteryBox }: { mysteryBox: any }) => {
+const CheckoutForm = ({ mysteryBox, user }: { mysteryBox: any; user: any }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [processing, setProcessing] = useState(false);
+  const [paymentRequest, setPaymentRequest] = useState<any>(null);
+
+  useEffect(() => {
+    if (stripe && mysteryBox) {
+      const pr = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: mysteryBox.name,
+          amount: Math.round(mysteryBox.price * 100),
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      pr.canMakePayment().then((result) => {
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
+
+      pr.on('paymentmethod', async (ev) => {
+        const { error } = await stripe.confirmPayment({
+          elements,
+          confirmParams: {
+            return_url: `${window.location.origin}/payment-success`,
+          },
+        });
+
+        if (error) {
+          ev.complete('fail');
+          toast({
+            title: "Payment Failed",
+            description: error.message,
+            variant: "destructive",
+          });
+        } else {
+          ev.complete('success');
+        }
+      });
+    }
+  }, [stripe, mysteryBox, elements, toast]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,41 +96,122 @@ const CheckoutForm = ({ mysteryBox }: { mysteryBox: any }) => {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-        <h2 className="font-anton text-2xl text-ock-orange mb-6">Complete Your Order</h2>
-        
-        <div className="bg-gray-50 rounded-xl p-6 mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="font-anton text-lg text-gray-900">{mysteryBox?.name}</h3>
-              <p className="text-sm text-gray-600">{mysteryBox?.description}</p>
+      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-ock-orange to-red-500 text-white p-6">
+          <div className="flex items-center space-x-3 mb-2">
+            <Lock className="w-6 h-6" />
+            <h2 className="font-anton text-2xl">Secure Checkout</h2>
+          </div>
+          <p className="text-orange-100">Your payment information is encrypted and secure</p>
+        </div>
+
+        <div className="p-8">
+          {/* Customer Info */}
+          <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">✓</span>
+              </div>
+              <div>
+                <p className="font-semibold text-green-800">Signed in as</p>
+                <p className="text-green-700">{user?.email}</p>
+              </div>
             </div>
-            <div className="text-right">
+          </div>
+
+          {/* Order Summary */}
+          <div className="bg-gray-50 rounded-xl p-6 mb-6">
+            <h3 className="font-anton text-lg text-gray-900 mb-4">Order Summary</h3>
+            <div className="flex justify-between items-center py-3 border-b border-gray-200">
+              <div>
+                <h4 className="font-semibold text-gray-900">{mysteryBox?.name}</h4>
+                <p className="text-sm text-gray-600">{mysteryBox?.description}</p>
+              </div>
+              <span className="font-anton text-xl text-ock-orange">${mysteryBox?.price}</span>
+            </div>
+            <div className="flex justify-between items-center pt-3">
+              <span className="font-semibold text-lg">Total:</span>
               <span className="font-anton text-2xl text-ock-orange">${mysteryBox?.price}</span>
             </div>
           </div>
-        </div>
 
-        <form onSubmit={handleSubmit}>
-          <PaymentElement />
+          {/* Apple Pay / Google Pay */}
+          {paymentRequest && (
+            <div className="mb-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <Smartphone className="w-5 h-5 text-gray-600" />
+                <span className="font-semibold text-gray-700">Express Checkout</span>
+              </div>
+              <PaymentRequestButtonElement 
+                options={{ paymentRequest }}
+                className="w-full"
+              />
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-gray-500">or pay with card</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Payment Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <CreditCard className="w-5 h-5 text-gray-600" />
+              <span className="font-semibold text-gray-700">Payment Information</span>
+            </div>
+            
+            <PaymentElement 
+              options={{
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#374151',
+                    '::placeholder': {
+                      color: '#9CA3AF',
+                    },
+                  },
+                },
+              }}
+            />
+            
+            <button 
+              type="submit"
+              disabled={!stripe || processing}
+              className={`w-full py-4 px-8 rounded-xl font-bold text-white transition-all duration-300 ${
+                processing 
+                  ? 'bg-gray-400 cursor-not-allowed' 
+                  : 'bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange transform hover:scale-105 shadow-lg'
+              }`}
+              data-testid="button-complete-payment"
+            >
+              {processing ? 'Processing Payment...' : `Complete Payment - $${mysteryBox?.price}`}
+            </button>
+          </form>
+
+          <div className="flex items-center justify-center space-x-4 mt-6 text-sm text-gray-500">
+            <div className="flex items-center space-x-1">
+              <Lock className="w-4 h-4" />
+              <span>SSL Encrypted</span>
+            </div>
+            <span>•</span>
+            <span>Powered by Stripe</span>
+            <span>•</span>
+            <span>Money-back guarantee</span>
+          </div>
+
           <button 
-            disabled={!stripe || processing}
-            className={`w-full mt-6 py-4 px-8 rounded-xl font-bold text-white transition-all duration-300 ${
-              processing 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-ock-orange hover:bg-red-500 transform hover:scale-105 shadow-lg'
-            }`}
+            onClick={() => navigate('/buy-ocks')}
+            className="w-full mt-6 py-3 px-6 rounded-xl border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300"
+            data-testid="button-back-to-shop"
           >
-            {processing ? 'Processing...' : `Pay $${mysteryBox?.price}`}
+            ← Back to Mystery Boxes
           </button>
-        </form>
-
-        <button 
-          onClick={() => navigate('/buy-ocks')}
-          className="w-full mt-4 py-3 px-6 rounded-xl border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300"
-        >
-          Back to Mystery Boxes
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -95,9 +220,20 @@ const CheckoutForm = ({ mysteryBox }: { mysteryBox: any }) => {
 export default function Checkout() {
   const [clientSecret, setClientSecret] = useState("");
   const [mysteryBox, setMysteryBox] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check if user is logged in
+    const storedUser = localStorage.getItem('ocks_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      setShowAuthModal(true);
+      return;
+    }
+
     // Get mystery box info from URL params
     const params = new URLSearchParams(window.location.search);
     const boxId = params.get('box');
@@ -114,13 +250,13 @@ export default function Checkout() {
       return;
     }
 
-    setMysteryBox({ id: boxId, price: amount, name: name, description: description });
+    setMysteryBox({ id: boxId, price: parseFloat(amount), name: name, description: description });
 
     // Create PaymentIntent
     apiRequest("POST", "/api/create-payment-intent", { 
       amount: parseFloat(amount),
       currency: 'usd',
-      metadata: { boxId, name }
+      metadata: { boxId, name, userEmail: user?.email }
     })
       .then((res) => res.json())
       .then((data) => {
@@ -133,14 +269,47 @@ export default function Checkout() {
           variant: "destructive",
         });
       });
-  }, [toast]);
+  }, [toast, user]);
 
-  if (!clientSecret || !mysteryBox) {
+  const handleAuthSuccess = (userData: any) => {
+    localStorage.setItem('ocks_user', JSON.stringify(userData));
+    setUser(userData);
+    setShowAuthModal(false);
+  };
+
+  if (showAuthModal) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-2xl mx-auto p-6 text-center">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <Lock className="w-16 h-16 text-ock-orange mx-auto mb-6" />
+            <h1 className="font-anton text-3xl text-gray-900 mb-4">Sign In Required</h1>
+            <p className="text-lg text-gray-600 mb-8">
+              Please sign in to your account to complete your purchase securely.
+            </p>
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300"
+            >
+              Sign In to Continue
+            </button>
+          </div>
+        </div>
+        <AuthModal 
+          isOpen={showAuthModal}
+          onClose={() => window.location.href = '/buy-ocks'}
+          onSuccess={handleAuthSuccess}
+        />
+      </div>
+    );
+  }
+
+  if (!clientSecret || !mysteryBox || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin w-12 h-12 border-4 border-ock-orange border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">Preparing checkout...</p>
+          <p className="text-lg text-gray-600">Preparing secure checkout...</p>
         </div>
       </div>
     );
@@ -149,8 +318,13 @@ export default function Checkout() {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <Elements stripe={stripePromise} options={{ clientSecret }}>
-        <CheckoutForm mysteryBox={mysteryBox} />
+        <CheckoutForm mysteryBox={mysteryBox} user={user} />
       </Elements>
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }
