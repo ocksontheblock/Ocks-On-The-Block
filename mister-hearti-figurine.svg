@@ -1,0 +1,144 @@
+<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- MISTER HEARTI - OCKS ON THE BLOCK MASTER TEMPLATE -->
+  <!-- Professional rectangular base matching master template -->
+  <rect x="60" y="530" width="280" height="60" rx="4" fill="#8B8680" stroke="#6B625C" stroke-width="2"/>
+  <!-- Base edge detail -->
+  <rect x="65" y="535" width="270" height="6" rx="2" fill="#9B9590"/>
+  
+  <!-- "OCKS ON THE" engraved text (top line) -->
+  <text x="200" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#5A5550">
+    OCKS ON THE
+  </text>
+  <!-- "BLOCK" engraved text (bottom line) -->
+  <text x="200" y="575" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#5A5550">
+    BLOCK
+  </text>
+  
+  <!-- Character stance - hands in hoodie pocket, relaxed pose -->
+  
+  <!-- Legs with relaxed stance -->
+  <ellipse cx="180" cy="480" rx="16" ry="40" fill="#D4A574"/>
+  <ellipse cx="220" cy="485" rx="16" ry="38" fill="#D4A574"/>
+  
+  <!-- Clean sneakers - chunky style like template, NO brand logos -->
+  <ellipse cx="180" cy="520" rx="24" ry="16" fill="#2C2C2C"/>
+  <ellipse cx="220" cy="520" rx="24" ry="16" fill="#2C2C2C"/>
+  <!-- Sneaker soles -->
+  <ellipse cx="180" cy="525" rx="26" ry="8" fill="#1A1A1A"/>
+  <ellipse cx="220" cy="525" rx="26" ry="8" fill="#1A1A1A"/>
+  <!-- Shoe details -->
+  <ellipse cx="180" cy="516" rx="20" ry="12" fill="#3A3A3A"/>
+  <ellipse cx="220" cy="516" rx="20" ry="12" fill="#3A3A3A"/>
+  <!-- White laces -->
+  <rect x="175" y="510" width="10" height="2" rx="1" fill="#FFFFFF"/>
+  <rect x="215" y="510" width="10" height="2" rx="1" fill="#FFFFFF"/>
+  
+  <!-- Dark jeans -->
+  <ellipse cx="200" cy="460" rx="45" ry="35" fill="#2E3A52"/>
+  <rect x="160" y="425" width="80" height="70" rx="15" fill="#2E3A52"/>
+  <!-- Jean cuffs -->
+  <rect x="165" y="485" width="15" height="8" rx="4" fill="#253144"/>
+  <rect x="220" y="490" width="15" height="8" rx="4" fill="#253144"/>
+  <!-- Jean pocket detail -->
+  <rect x="175" y="440" width="12" height="15" rx="2" fill="#253144"/>
+  
+  <!-- Torso -->
+  <ellipse cx="200" cy="380" rx="50" ry="45" fill="#D4A574"/>
+  
+  <!-- Sage green hoodie - like in the photos -->
+  <ellipse cx="200" cy="380" rx="55" ry="50" fill="#9CAF88"/>
+  <!-- Hood down style -->
+  <path d="M150,340 Q200,325 250,340 Q200,350 150,340" fill="#8A9D78"/>
+  
+  <!-- Arms - hands in hoodie pocket pose -->
+  <ellipse cx="150" cy="390" rx="20" ry="35" fill="#D4A574" transform="rotate(-15 150 390)"/>
+  <ellipse cx="250" cy="390" rx="20" ry="35" fill="#D4A574" transform="rotate(15 250 390)"/>
+  <!-- Hoodie sleeves -->
+  <ellipse cx="150" cy="385" rx="22" ry="30" fill="#9CAF88" transform="rotate(-15 150 385)"/>
+  <ellipse cx="250" cy="385" rx="22" ry="30" fill="#9CAF88" transform="rotate(15 250 385)"/>
+  
+  <!-- Hands in hoodie pocket -->
+  <ellipse cx="200" cy="410" rx="35" ry="15" fill="#8A9D78"/>
+  
+  <!-- Bodega coffee cup visible near pocket -->
+  <rect x="225" y="395" width="12" height="18" rx="2" fill="#F39C12"/>
+  <rect x="227" y="398" width="8" height="3" fill="#3498DB"/>
+  <rect x="227" y="403" width="8" height="2" fill="#E74C3C"/>
+  <!-- Steam -->
+  <path d="M231,393 Q233,388 231,383" stroke="#ECF0F1" stroke-width="1" fill="none" opacity="0.6"/>
+  
+  <!-- Head -->
+  <circle cx="200" cy="340" r="42" fill="#D4A574"/>
+  
+  <!-- Mister Hearti's signature thick curly hair -->
+  <!-- Main hair mass -->
+  <path d="M158,320 Q170,280 200,285 Q230,280 242,320 Q240,330 230,335 Q220,340 210,342 Q200,345 190,342 Q180,340 170,335 Q160,330 158,320" fill="#2C1810"/>
+  
+  <!-- Curly texture details -->
+  <circle cx="175" cy="305" r="8" fill="#3A251C"/>
+  <circle cx="190" cy="295" r="7" fill="#3A251C"/>
+  <circle cx="210" cy="295" r="7" fill="#3A251C"/>
+  <circle cx="225" cy="305" r="8" fill="#3A251C"/>
+  <circle cx="200" cy="288" r="6" fill="#3A251C"/>
+  <circle cx="185" cy="310" r="6" fill="#3A251C"/>
+  <circle cx="215" cy="310" r="6" fill="#3A251C"/>
+  
+  <!-- More curly details -->
+  <circle cx="170" cy="315" r="5" fill="#453228"/>
+  <circle cx="195" cy="305" r="5" fill="#453228"/>
+  <circle cx="205" cy="305" r="5" fill="#453228"/>
+  <circle cx="230" cy="315" r="5" fill="#453228"/>
+  
+  <!-- Hair highlights -->
+  <circle cx="185" cy="300" r="3" fill="#594135" opacity="0.7"/>
+  <circle cx="215" cy="300" r="3" fill="#594135" opacity="0.7"/>
+  <circle cx="200" cy="295" r="2" fill="#594135" opacity="0.7"/>
+  
+  <!-- Face - Mister Hearti's friendly expression -->
+  <!-- Eyes with warm, welcoming look -->
+  <ellipse cx="185" cy="335" rx="9" ry="11" fill="white"/>
+  <ellipse cx="215" cy="335" rx="9" ry="11" fill="white"/>
+  <circle cx="185" cy="335" r="6" fill="#2C3E50"/>
+  <circle cx="215" cy="335" r="6" fill="#2C3E50"/>
+  <!-- Pupils with slight gleam -->
+  <circle cx="185" cy="335" r="3" fill="#000"/>
+  <circle cx="215" cy="335" r="3" fill="#000"/>
+  <circle cx="187" cy="333" r="1" fill="#FFF" opacity="0.8"/>
+  <circle cx="217" cy="333" r="1" fill="#FFF" opacity="0.8"/>
+  
+  <!-- Thick eyebrows -->
+  <path d="M175,325 Q185,320 195,325" stroke="#2C1810" stroke-width="4" fill="none"/>
+  <path d="M205,325 Q215,320 225,325" stroke="#2C1810" stroke-width="4" fill="none"/>
+  
+  <!-- Nose -->
+  <ellipse cx="200" cy="345" rx="4" ry="7" fill="#C19A6B"/>
+  
+  <!-- Mister Hearti's signature goatee and facial hair -->
+  <!-- Full goatee -->
+  <path d="M185,355 Q200,368 215,355 Q212,365 200,368 Q188,365 185,355" fill="#2C1810"/>
+  <!-- Mustache -->
+  <ellipse cx="200" cy="350" rx="12" ry="4" fill="#2C1810"/>
+  <!-- Sideburn area -->
+  <path d="M170,340 Q175,350 180,355" stroke="#2C1810" stroke-width="3" fill="none"/>
+  <path d="M220,355 Q225,350 230,340" stroke="#2C1810" stroke-width="3" fill="none"/>
+  
+  <!-- Mouth - friendly, welcoming smile -->
+  <path d="M185,358 Q200,368 215,358" stroke="#8B4513" stroke-width="3" fill="none"/>
+  <!-- Slight lip detail -->
+  <ellipse cx="200" cy="362" rx="8" ry="2" fill="#A0695C" opacity="0.6"/>
+  
+  <!-- Ears -->
+  <ellipse cx="158" cy="340" rx="10" ry="14" fill="#D4A574"/>
+  <ellipse cx="242" cy="340" rx="10" ry="14" fill="#D4A574"/>
+  
+  <!-- Hoodie details -->
+  <!-- Drawstring tips -->
+  <circle cx="185" cy="365" r="2" fill="#6B7A5F"/>
+  <circle cx="215" cy="365" r="2" fill="#6B7A5F"/>
+  
+  <!-- Hoodie front pocket opening -->
+  <ellipse cx="200" cy="405" rx="25" ry="8" fill="#8A9D78"/>
+  
+  <!-- Subtle hoodie seam details -->
+  <path d="M170,380 Q200,375 230,380" stroke="#8A9D78" stroke-width="1" fill="none" opacity="0.5"/>
+</svg>
