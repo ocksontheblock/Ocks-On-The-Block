@@ -1,0 +1,92 @@
+<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+  <!-- Base platform -->
+  <rect x="50" y="450" width="300" height="40" rx="5" fill="#8B8680"/>
+  <text x="200" y="478" text-anchor="middle" font-family="Arial Black" font-size="18" fill="#333">
+    OCKS ON THE BLOCK
+  </text>
+  
+  <!-- Character body -->
+  <!-- Legs -->
+  <ellipse cx="160" cy="420" rx="12" ry="25" fill="#D4A574"/>
+  <ellipse cx="240" cy="420" rx="12" ry="25" fill="#D4A574"/>
+  
+  <!-- Shoes (without brand logos) -->
+  <ellipse cx="160" cy="440" rx="20" ry="12" fill="#2C3E50"/>
+  <ellipse cx="240" cy="440" rx="20" ry="12" fill="#2C3E50"/>
+  <!-- Shoe laces -->
+  <path d="M150,435 Q160,430 170,435" stroke="#34495E" stroke-width="2" fill="none"/>
+  <path d="M230,435 Q240,430 250,435" stroke="#34495E" stroke-width="2" fill="none"/>
+  
+  <!-- Shorts -->
+  <rect x="140" y="380" width="120" height="50" rx="8" fill="#A0936B"/>
+  <!-- Shorts pocket -->
+  <rect x="280" y="390" width="15" height="20" rx="2" fill="#8B7F5C"/>
+  
+  <!-- Torso -->
+  <ellipse cx="200" cy="340" rx="45" ry="35" fill="#D4A574"/>
+  
+  <!-- Hoodie (without brand logo) -->
+  <ellipse cx="200" cy="340" rx="50" ry="40" fill="#3498DB"/>
+  <!-- Hoodie hood -->
+  <path d="M160,315 Q200,300 240,315 Q235,325 200,330 Q165,325 160,315" fill="#2980B9"/>
+  <!-- Hoodie strings -->
+  <circle cx="185" cy="325" r="3" fill="#34495E"/>
+  <circle cx="215" cy="325" r="3" fill="#34495E"/>
+  <!-- Hoodie pocket -->
+  <ellipse cx="200" cy="360" rx="25" ry="8" fill="#2980B9"/>
+  
+  <!-- Arms -->
+  <ellipse cx="140" cy="330" rx="18" ry="30" fill="#D4A574"/>
+  <ellipse cx="260" cy="330" rx="18" ry="30" fill="#D4A574"/>
+  
+  <!-- Hoodie sleeves -->
+  <ellipse cx="140" cy="325" rx="20" ry="25" fill="#3498DB"/>
+  <ellipse cx="260" cy="325" rx="20" ry="25" fill="#3498DB"/>
+  
+  <!-- Hands -->
+  <circle cx="125" cy="350" r="12" fill="#D4A574"/>
+  <circle cx="275" cy="350" r="12" fill="#D4A574"/>
+  
+  <!-- Coffee cup in hand -->
+  <rect x="110" y="335" width="16" height="20" rx="2" fill="#F4D03F"/>
+  <!-- Coffee cup design (tropical/pineapple pattern) -->
+  <path d="M115,340 Q118,338 121,340 Q118,342 115,340" fill="#27AE60"/>
+  <path d="M115,345 Q118,343 121,345 Q118,347 115,345" fill="#27AE60"/>
+  <ellipse cx="118" cy="350" rx="2" ry="3" fill="#E67E22"/>
+  
+  <!-- Head -->
+  <circle cx="200" cy="280" r="35" fill="#D4A574"/>
+  
+  <!-- Facial hair -->
+  <path d="M175,295 Q200,305 225,295 Q220,300 200,302 Q180,300 175,295" fill="#8B4513"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="188" cy="275" rx="8" ry="10" fill="white"/>
+  <ellipse cx="212" cy="275" rx="8" ry="10" fill="white"/>
+  <circle cx="188" cy="275" r="5" fill="#2C3E50"/>
+  <circle cx="212" cy="275" r="5" fill="#2C3E50"/>
+  
+  <!-- Eyebrows -->
+  <path d="M180,265 Q188,262 196,265" stroke="#654321" stroke-width="3" fill="none"/>
+  <path d="M204,265 Q212,262 220,265" stroke="#654321" stroke-width="3" fill="none"/>
+  
+  <!-- Nose -->
+  <ellipse cx="200" cy="285" rx="3" ry="5" fill="#C19A6B"/>
+  
+  <!-- Mouth (smiling) -->
+  <path d="M190,295 Q200,300 210,295" stroke="#8B4513" stroke-width="2" fill="none"/>
+  
+  <!-- Ears -->
+  <ellipse cx="165" cy="280" rx="8" ry="12" fill="#D4A574"/>
+  <ellipse cx="235" cy="280" rx="8" ry="12" fill="#D4A574"/>
+  
+  <!-- Hat (without brand logo) -->
+  <ellipse cx="200" cy="260" rx="40" ry="15" fill="#7D8471"/>
+  <path d="M160,260 Q200,245 240,260 Q235,250 200,248 Q165,250 160,260" fill="#8FBF7F"/>
+  <!-- Hat brim -->
+  <ellipse cx="200" cy="265" rx="45" ry="8" fill="#6B6B47"/>
+  
+  <!-- Hair (showing under hat) -->
+  <path d="M170,250 Q180,245 190,250" stroke="#654321" stroke-width="4" fill="none"/>
+  <path d="M210,250 Q220,245 230,250" stroke="#654321" stroke-width="4" fill="none"/>
+</svg>

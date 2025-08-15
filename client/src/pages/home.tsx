@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import HamburgerMenu from "@/components/hamburger-menu";
 import MisterHeartiSection from "@/components/mister-hearti-section";
+import AmpedOckShowcase from "@/components/amped-ock-showcase";
 import Footer from "@/components/footer";
 import EmailSignupModal from "@/components/email-signup-modal";
-import logoPath from "@assets/05510F49-8788-4872-9022-591FAA016F73_1754809027759.png";
+import Logo from "@/components/logo";
 
 export default function Home() {
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -32,11 +33,7 @@ export default function Home() {
         
         <div className="text-center max-w-5xl mx-auto relative z-10">
           <div className="mb-12">
-            <img 
-              src={logoPath} 
-              alt="Ocks on the Block - Ockwear for Everywhere" 
-              className="mx-auto mb-8 max-w-lg w-full h-auto drop-shadow-2xl"
-            />
+            <Logo variant="large" className="mb-8" />
           </div>
           
           <div className="space-y-6 mb-12">
@@ -78,6 +75,7 @@ export default function Home() {
         </div>
       </section>
 
+      <AmpedOckShowcase />
       <MisterHeartiSection />
       <Footer />
       
