@@ -1,9 +1,14 @@
 <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-  <!-- Clean base platform without any logos -->
+  <!-- Base platform with graffiti logo -->
   <rect x="50" y="450" width="300" height="40" rx="5" fill="#8B8680"/>
-  <!-- Simple texture lines instead of text -->
-  <rect x="60" y="465" width="280" height="2" rx="1" fill="#7A746F"/>
-  <rect x="70" y="470" width="260" height="1" rx="0.5" fill="#7A746F"/>
+  <!-- Graffiti-style logo on base -->
+  <text x="200" y="475" text-anchor="middle" font-family="Permanent Marker, Bangers, cursive" font-size="16" font-weight="bold" fill="#2C3E50" stroke="#000" stroke-width="0.5">
+    OCKS ON THE BLOCK
+  </text>
+  <!-- Graffiti shadow effect -->
+  <text x="201" y="476" text-anchor="middle" font-family="Permanent Marker, Bangers, cursive" font-size="16" font-weight="bold" fill="#FF4500" opacity="0.7">
+    OCKS ON THE BLOCK
+  </text>
   
   <!-- Character body -->
   <!-- Legs -->

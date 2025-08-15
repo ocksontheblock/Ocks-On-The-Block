@@ -33,7 +33,9 @@ export default function Home() {
         
         <div className="text-center max-w-5xl mx-auto relative z-10">
           <div className="mb-12">
-            <Logo variant="large" className="mb-8" />
+            <h1 className="font-anton text-6xl md:text-8xl lg:text-9xl mb-6 text-gray-900">
+              Ocks on the Block
+            </h1>
           </div>
           
           <div className="space-y-6 mb-12">
