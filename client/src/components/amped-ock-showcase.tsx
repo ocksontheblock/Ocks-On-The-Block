@@ -53,33 +53,18 @@ export default function AmpedOckShowcase() {
           
           <div className="text-center">
             <div className="bg-white rounded-3xl p-8 shadow-2xl inline-block">
-              <div className="relative">
-                <img 
-                  src={ampedOckPath} 
-                  alt="Amped Ock - NYC Corner Store Legend" 
-                  className="w-full max-w-md h-auto mx-auto transform hover:scale-105 transition-all duration-500"
-                />
-                {/* SVG overlay for clean base logo */}
-                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-                  <svg width="200" height="30" viewBox="0 0 200 30" className="opacity-90">
-                    {/* Graffiti-style base text */}
-                    <text x="100" y="20" textAnchor="middle" fontFamily="Permanent Marker, Bangers, cursive" fontSize="12" fontWeight="bold" fill="#2C3E50" stroke="#000" strokeWidth="0.3">
-                      OCKS ON THE BLOCK
-                    </text>
-                    {/* Shadow effect */}
-                    <text x="101" y="21" textAnchor="middle" fontFamily="Permanent Marker, Bangers, cursive" fontSize="12" fontWeight="bold" fill="#FF4500" opacity="0.6">
-                      OCKS ON THE BLOCK
-                    </text>
-                  </svg>
-                </div>
-              </div>
+              <img 
+                src={ampedOckPath} 
+                alt="Amped Ock - NYC Corner Store Legend - Copyright Safe Design" 
+                className="w-full max-w-md h-auto mx-auto transform hover:scale-105 transition-all duration-500"
+              />
               <div className="mt-6 space-y-2">
                 <h4 className="font-anton text-xl text-gray-900">Amped Ock Figurine</h4>
                 <p className="text-sm text-gray-600">
                   Celebrating authentic NYC corner store culture
                 </p>
                 <div className="text-xs text-gray-500 italic">
-                  * Clean design with authentic street style branding
+                  * Copyright-safe design with no brand logos on clothing
                 </div>
               </div>
             </div>

@@ -1,12 +1,20 @@
 <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
   <!-- Base platform with graffiti logo -->
-  <rect x="50" y="450" width="300" height="40" rx="5" fill="#8B8680"/>
-  <!-- Graffiti-style logo on base -->
-  <text x="200" y="475" text-anchor="middle" font-family="Permanent Marker, Bangers, cursive" font-size="16" font-weight="bold" fill="#2C3E50" stroke="#000" stroke-width="0.5">
+  <rect x="50" y="450" width="300" height="40" rx="5" fill="#2C3E50"/>
+  <!-- Base edge highlight -->
+  <rect x="50" y="450" width="300" height="4" rx="2" fill="#34495E"/>
+  
+  <!-- Graffiti-style "OCKS ON THE BLOCK" logo -->
+  <!-- Shadow layer for depth -->
+  <text x="202" y="477" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="14" font-weight="900" fill="#000000" opacity="0.5">
     OCKS ON THE BLOCK
   </text>
-  <!-- Graffiti shadow effect -->
-  <text x="201" y="476" text-anchor="middle" font-family="Permanent Marker, Bangers, cursive" font-size="16" font-weight="bold" fill="#FF4500" opacity="0.7">
+  <!-- Main text with outline -->
+  <text x="200" y="475" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="14" font-weight="900" fill="#FF4500" stroke="#FFFFFF" stroke-width="0.5">
+    OCKS ON THE BLOCK
+  </text>
+  <!-- Highlight layer -->
+  <text x="199" y="474" text-anchor="middle" font-family="Impact, Arial Black, sans-serif" font-size="14" font-weight="900" fill="#FFD700" opacity="0.8">
     OCKS ON THE BLOCK
   </text>
   
@@ -15,15 +23,15 @@
   <ellipse cx="160" cy="420" rx="12" ry="25" fill="#D4A574"/>
   <ellipse cx="240" cy="420" rx="12" ry="25" fill="#D4A574"/>
   
-  <!-- Clean shoes without brand logos -->
-  <ellipse cx="160" cy="440" rx="20" ry="12" fill="#2C3E50"/>
-  <ellipse cx="240" cy="440" rx="20" ry="12" fill="#2C3E50"/>
-  <!-- Simple shoe design -->
-  <ellipse cx="160" cy="438" rx="15" ry="8" fill="#34495E"/>
-  <ellipse cx="240" cy="438" rx="15" ry="8" fill="#34495E"/>
-  <!-- Basic laces pattern -->
-  <path d="M150,435 Q160,430 170,435" stroke="#566573" stroke-width="2" fill="none"/>
-  <path d="M230,435 Q240,430 250,435" stroke="#566573" stroke-width="2" fill="none"/>
+  <!-- Plain shoes without any brand logos -->
+  <ellipse cx="160" cy="440" rx="20" ry="12" fill="#1C1C1C"/>
+  <ellipse cx="240" cy="440" rx="20" ry="12" fill="#1C1C1C"/>
+  <!-- Simple solid shoe design -->
+  <ellipse cx="160" cy="438" rx="15" ry="8" fill="#2C2C2C"/>
+  <ellipse cx="240" cy="438" rx="15" ry="8" fill="#2C2C2C"/>
+  <!-- Basic white laces -->
+  <path d="M150,435 Q160,430 170,435" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
+  <path d="M230,435 Q240,430 250,435" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
   
   <!-- Shorts -->
   <rect x="140" y="380" width="120" height="50" rx="8" fill="#A0936B"/>
@@ -33,23 +41,23 @@
   <!-- Torso -->
   <ellipse cx="200" cy="340" rx="45" ry="35" fill="#D4A574"/>
   
-  <!-- Clean hoodie without brand logos -->
-  <ellipse cx="200" cy="340" rx="50" ry="40" fill="#3498DB"/>
+  <!-- Plain hoodie without any brand logos -->
+  <ellipse cx="200" cy="340" rx="50" ry="40" fill="#7F8C8D"/>
   <!-- Hoodie hood -->
-  <path d="M160,315 Q200,300 240,315 Q235,325 200,330 Q165,325 160,315" fill="#2980B9"/>
+  <path d="M160,315 Q200,300 240,315 Q235,325 200,330 Q165,325 160,315" fill="#6C7B7D"/>
   <!-- Hoodie strings -->
   <circle cx="185" cy="325" r="3" fill="#34495E"/>
   <circle cx="215" cy="325" r="3" fill="#34495E"/>
   <!-- Hoodie pocket -->
-  <ellipse cx="200" cy="360" rx="25" ry="8" fill="#2980B9"/>
+  <ellipse cx="200" cy="360" rx="25" ry="8" fill="#6C7B7D"/>
   
   <!-- Arms -->
   <ellipse cx="140" cy="330" rx="18" ry="30" fill="#D4A574"/>
   <ellipse cx="260" cy="330" rx="18" ry="30" fill="#D4A574"/>
   
-  <!-- Clean hoodie sleeves -->
-  <ellipse cx="140" cy="325" rx="20" ry="25" fill="#3498DB"/>
-  <ellipse cx="260" cy="325" rx="20" ry="25" fill="#3498DB"/>
+  <!-- Plain hoodie sleeves -->
+  <ellipse cx="140" cy="325" rx="20" ry="25" fill="#7F8C8D"/>
+  <ellipse cx="260" cy="325" rx="20" ry="25" fill="#7F8C8D"/>
   
   <!-- Hands -->
   <circle cx="125" cy="350" r="12" fill="#D4A574"/>
@@ -88,13 +96,13 @@
   <ellipse cx="165" cy="280" rx="8" ry="12" fill="#D4A574"/>
   <ellipse cx="235" cy="280" rx="8" ry="12" fill="#D4A574"/>
   
-  <!-- Clean hat without brand logos -->
-  <ellipse cx="200" cy="260" rx="40" ry="15" fill="#7D8471"/>
-  <path d="M160,260 Q200,245 240,260 Q235,250 200,248 Q165,250 160,260" fill="#8FBF7F"/>
+  <!-- Plain hat without any logos -->
+  <ellipse cx="200" cy="260" rx="40" ry="15" fill="#2C3E50"/>
+  <path d="M160,260 Q200,245 240,260 Q235,250 200,248 Q165,250 160,260" fill="#34495E"/>
   <!-- Hat brim -->
-  <ellipse cx="200" cy="265" rx="45" ry="8" fill="#6B6B47"/>
-  <!-- Simple hat design -->
-  <ellipse cx="200" cy="255" rx="25" ry="8" fill="#8FBF7F"/>
+  <ellipse cx="200" cy="265" rx="45" ry="8" fill="#1B2631"/>
+  <!-- Simple solid design -->
+  <ellipse cx="200" cy="255" rx="25" ry="8" fill="#34495E"/>
   
   <!-- Hair (showing under hat) -->
   <path d="M170,250 Q180,245 190,250" stroke="#654321" stroke-width="4" fill="none"/>
