@@ -1,0 +1,142 @@
+<svg viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- MISTER HEARTI - ELITE RARITY -->
+  <!-- Premium gold-accented base -->
+  <rect x="50" y="520" width="300" height="70" rx="8" fill="#B8860B" stroke="#DAA520" stroke-width="3"/>
+  <rect x="55" y="525" width="290" height="10" rx="4" fill="#FFD700"/>
+  <!-- Gold corner accents -->
+  <rect x="50" y="520" width="20" height="20" rx="8" fill="#FFD700"/>
+  <rect x="330" y="520" width="20" height="20" rx="8" fill="#FFD700"/>
+  <rect x="50" y="570" width="20" height="20" rx="8" fill="#FFD700"/>
+  <rect x="330" y="570" width="20" height="20" rx="8" fill="#FFD700"/>
+  
+  <!-- Gold embossed text -->
+  <text x="202" y="555" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#8B4513" opacity="0.8">
+    OCKS ON THE
+  </text>
+  <text x="200" y="553" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#FFD700" stroke="#B8860B" stroke-width="0.8">
+    OCKS ON THE
+  </text>
+  <text x="202" y="575" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#8B4513" opacity="0.8">
+    BLOCK
+  </text>
+  <text x="200" y="573" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#FFD700" stroke="#B8860B" stroke-width="0.8">
+    BLOCK
+  </text>
+  
+  <!-- Confident stance -->
+  <ellipse cx="178" cy="470" rx="18" ry="44" fill="#D4A574"/>
+  <ellipse cx="222" cy="475" rx="18" ry="42" fill="#D4A574"/>
+  
+  <!-- Premium sneakers -->
+  <ellipse cx="178" cy="510" rx="28" ry="20" fill="#000"/>
+  <ellipse cx="222" cy="510" rx="28" ry="20" fill="#000"/>
+  <ellipse cx="178" cy="515" rx="30" ry="12" fill="#1A1A1A"/>
+  <ellipse cx="222" cy="515" rx="30" ry="12" fill="#1A1A1A"/>
+  <ellipse cx="178" cy="506" rx="24" ry="16" fill="#333"/>
+  <ellipse cx="222" cy="506" rx="24" ry="16" fill="#333"/>
+  <!-- Gold shoe accents -->
+  <rect x="170" y="500" width="16" height="4" rx="2" fill="#FFD700"/>
+  <rect x="214" y="500" width="16" height="4" rx="2" fill="#FFD700"/>
+  <path d="M162,510 Q178,505 194,510" stroke="#FFD700" stroke-width="2" fill="none"/>
+  <path d="M206,510 Q222,505 238,510" stroke="#FFD700" stroke-width="2" fill="none"/>
+  
+  <!-- Premium black jeans -->
+  <ellipse cx="200" cy="450" rx="49" ry="39" fill="#0F0F0F"/>
+  <rect x="156" y="415" width="88" height="78" rx="19" fill="#0F0F0F"/>
+  <rect x="161" y="475" width="19" height="12" rx="6" fill="#1A1A1A"/>
+  <rect x="216" y="480" width="19" height="12" rx="6" fill="#1A1A1A"/>
+  <!-- Premium stitching -->
+  <path d="M168,425 L168,465" stroke="#FFD700" stroke-width="1" fill="none"/>
+  <path d="M232,430 L232,470" stroke="#FFD700" stroke-width="1" fill="none"/>
+  <!-- Belt -->
+  <rect x="170" y="415" width="60" height="8" rx="4" fill="#2F1B14"/>
+  <rect x="195" y="413" width="10" height="12" rx="2" fill="#B8860B"/>
+  
+  <!-- Torso -->
+  <ellipse cx="200" cy="370" rx="54" ry="49" fill="#D4A574"/>
+  
+  <!-- Designer jacket -->
+  <ellipse cx="200" cy="370" rx="59" ry="54" fill="#1B1B1B"/>
+  <!-- Jacket lapels -->
+  <path d="M155,340 Q175,320 195,340 L180,370 Q165,350 155,340" fill="#2A2A2A"/>
+  <path d="M245,340 Q225,320 205,340 L220,370 Q235,350 245,340" fill="#2A2A2A"/>
+  <!-- Gold jacket details -->
+  <rect x="175" y="350" width="4" height="20" rx="2" fill="#FFD700"/>
+  <rect x="221" y="350" width="4" height="20" rx="2" fill="#FFD700"/>
+  <circle cx="177" cy="345" r="3" fill="#FFD700"/>
+  <circle cx="223" cy="345" r="3" fill="#FFD700"/>
+  
+  <!-- Arms -->
+  <ellipse cx="146" cy="380" rx="24" ry="39" fill="#D4A574"/>
+  <ellipse cx="254" cy="380" rx="24" ry="39" fill="#D4A574"/>
+  <ellipse cx="146" cy="375" rx="26" ry="34" fill="#1B1B1B"/>
+  <ellipse cx="254" cy="375" rx="26" ry="34" fill="#1B1B1B"/>
+  
+  <!-- Hands with gold watch and ring -->
+  <circle cx="128" cy="410" r="16" fill="#D4A574"/>
+  <circle cx="272" cy="410" r="16" fill="#D4A574"/>
+  <!-- Gold watch -->
+  <rect x="122" y="405" width="12" height="8" rx="4" fill="#FFD700"/>
+  <rect x="124" y="406" width="8" height="6" rx="3" fill="#FFF8DC"/>
+  <!-- Ring -->
+  <circle cx="275" cy="407" r="2" fill="#FFD700"/>
+  
+  <!-- Premium coffee cup -->
+  <rect x="250" y="390" width="15" height="22" rx="3" fill="#8B4513"/>
+  <rect x="252" y="393" width="11" height="4" fill="#FFD700"/>
+  <rect x="252" y="398" width="11" height="3" fill="#000"/>
+  <text x="257" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" fill="#FFD700">NYC</text>
+  
+  <!-- Head -->
+  <circle cx="200" cy="330" r="46" fill="#D4A574"/>
+  
+  <!-- Professional styled hair -->
+  <path d="M154,310 Q166,270 200,275 Q234,270 246,310 Q244,320 234,325 Q224,330 214,332 Q200,335 186,332 Q176,330 166,325 Q154,320 154,310" fill="#2C1810"/>
+  <circle cx="171" cy="295" r="10" fill="#3A251C"/>
+  <circle cx="186" cy="285" r="9" fill="#3A251C"/>
+  <circle cx="214" cy="285" r="9" fill="#3A251C"/>
+  <circle cx="229" cy="295" r="10" fill="#3A251C"/>
+  <circle cx="200" cy="278" r="8" fill="#3A251C"/>
+  <circle cx="181" cy="300" r="8" fill="#3A251C"/>
+  <circle cx="219" cy="300" r="8" fill="#3A251C"/>
+  <!-- Hair highlights and texture -->
+  <circle cx="183" cy="290" r="4" fill="#4A3529"/>
+  <circle cx="217" cy="290" r="4" fill="#4A3529"/>
+  <circle cx="200" cy="283" r="3" fill="#4A3529"/>
+  <circle cx="175" cy="305" r="3" fill="#594135"/>
+  <circle cx="225" cy="305" r="3" fill="#594135"/>
+  
+  <!-- Sophisticated face -->
+  <ellipse cx="181" cy="325" rx="11" ry="13" fill="white"/>
+  <ellipse cx="219" cy="325" rx="11" ry="13" fill="white"/>
+  <circle cx="181" cy="325" r="8" fill="#2C3E50"/>
+  <circle cx="219" cy="325" r="8" fill="#2C3E50"/>
+  <circle cx="181" cy="325" r="5" fill="#000"/>
+  <circle cx="219" cy="325" r="5" fill="#000"/>
+  <circle cx="183" cy="323" r="2" fill="#FFF" opacity="0.9"/>
+  <circle cx="221" cy="323" r="2" fill="#FFF" opacity="0.9"/>
+  
+  <!-- Well-groomed eyebrows -->
+  <path d="M171,315 Q181,310 191,315" stroke="#2C1810" stroke-width="6" fill="none"/>
+  <path d="M209,315 Q219,310 229,315" stroke="#2C1810" stroke-width="6" fill="none"/>
+  
+  <!-- Refined nose -->
+  <ellipse cx="200" cy="335" rx="5" ry="9" fill="#C19A6B"/>
+  
+  <!-- Perfectly groomed facial hair -->
+  <path d="M181,345 Q200,358 219,345 Q216,355 200,358 Q184,355 181,345" fill="#2C1810"/>
+  <ellipse cx="200" cy="340" rx="14" ry="6" fill="#2C1810"/>
+  <path d="M168,335 Q173,345 178,350" stroke="#2C1810" stroke-width="4" fill="none"/>
+  <path d="M222,350 Q227,345 232,335" stroke="#2C1810" stroke-width="4" fill="none"/>
+  
+  <!-- Confident smile -->
+  <path d="M181,348 Q200,358 219,348" stroke="#8B4513" stroke-width="4" fill="none"/>
+  <ellipse cx="200" cy="352" rx="10" ry="4" fill="#A0695C" opacity="0.7"/>
+  
+  <!-- Ears -->
+  <ellipse cx="154" cy="330" rx="12" ry="16" fill="#D4A574"/>
+  <ellipse cx="246" cy="330" rx="12" ry="16" fill="#D4A574"/>
+  
+  <!-- Jacket collar -->
+  <path d="M180,355 Q200,350 220,355" stroke="#2A2A2A" stroke-width="6" fill="none"/>
+</svg>
