@@ -1,14 +1,13 @@
 import { Instagram } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
+import Logo from "./logo";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white py-12 px-4 md:px-8">
       <div className="max-w-4xl mx-auto text-center">
         <div className="mb-8">
-          <h3 className="font-anton text-2xl text-ock-orange mb-4">
-            Ocks on the Block
-          </h3>
+          <Logo variant="footer" className="mb-4" />
           <p className="text-gray-400">
             Authentic street culture from NYC's finest corner stores
           </p>
