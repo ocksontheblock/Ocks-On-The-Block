@@ -1,4 +1,5 @@
-import ampedOckPath from "@assets/8DD0FE63-DFAA-44FB-934F-6993CB26A54A_1755271476620.png";
+// Using the copyright-safe SVG version
+const ampedOckPath = "/amped-ock-clean.svg";
 
 export default function AmpedOckShowcase() {
   return (
