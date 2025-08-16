@@ -1,5 +1,4 @@
-// Using the copyright-safe SVG version
-const ampedOckPath = "/amped-ock-clean.svg";
+import ampedOckPath from "@assets/8DD0FE63-DFAA-44FB-934F-6993CB26A54A_1755271476620.png";
 
 export default function AmpedOckShowcase() {
   return (
@@ -56,7 +55,7 @@ export default function AmpedOckShowcase() {
             <div className="bg-white rounded-3xl p-8 shadow-2xl inline-block">
               <img 
                 src={ampedOckPath} 
-                alt="Amped Ock - NYC Corner Store Legend - Copyright Safe Design" 
+                alt="Amped Ock - NYC Corner Store Legend" 
                 className="w-full max-w-md h-auto mx-auto transform hover:scale-105 transition-all duration-500"
               />
               <div className="mt-6 space-y-2">
@@ -65,7 +64,7 @@ export default function AmpedOckShowcase() {
                   Celebrating authentic NYC corner store culture
                 </p>
                 <div className="text-xs text-gray-500 italic">
-                  * Copyright-safe design with no brand logos on clothing
+                  * Original NYC street culture design
                 </div>
               </div>
             </div>
