@@ -73,6 +73,12 @@ export default function HamburgerMenu() {
           >
             The Ocky Map
           </button>
+          <button
+            onClick={() => handleLinkClick('/scavenger-hunt')}
+            className="block text-white text-4xl md:text-5xl my-6 font-anton hover:text-ock-orange transition-colors duration-300"
+          >
+            Scavenger Hunt
+          </button>
         </div>
       </div>
     </nav>

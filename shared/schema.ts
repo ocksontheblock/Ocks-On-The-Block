@@ -64,6 +64,43 @@ export const locations = pgTable("locations", {
   verified: boolean("verified").default(false),
 });
 
+// Scavenger Hunt Tables
+export const scavengerHuntParticipants = pgTable("scavenger_hunt_participants", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  status: text("status").notNull().default("active"), // active, completed, disqualified
+  totalOcksFound: integer("total_ocks_found").default(0),
+  totalPoints: integer("total_points").default(0),
+  joinedAt: timestamp("joined_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const scavengerHuntSubmissions = pgTable("scavenger_hunt_submissions", {
+  id: serial("id").primaryKey(),
+  participantId: integer("participant_id").references(() => scavengerHuntParticipants.id).notNull(),
+  ockId: integer("ock_id").references(() => ocks.id).notNull(),
+  locationId: integer("location_id").references(() => locations.id).notNull(),
+  photoUrl: text("photo_url").notNull(),
+  figurineRarity: text("figurine_rarity").notNull(), // common, rare, elite, legendary
+  verificationStatus: text("verification_status").notNull().default("pending"), // pending, approved, rejected
+  points: integer("points").default(0),
+  submittedAt: timestamp("submitted_at").defaultNow(),
+  verifiedAt: timestamp("verified_at"),
+  adminNotes: text("admin_notes"),
+});
+
+export const scavengerHuntPrizes = pgTable("scavenger_hunt_prizes", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  rarity: text("rarity").notNull(), // common, rare, elite, legendary, grand_prize
+  minOcksRequired: integer("min_ocks_required").notNull(),
+  minPoints: integer("min_points").notNull(),
+  prizeValue: decimal("prize_value", { precision: 10, scale: 2 }).notNull(),
+  image: text("image"),
+  available: boolean("available").default(true),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   cartItems: many(cartItems),
@@ -88,10 +125,35 @@ export const ocksRelations = relations(ocks, ({ many }) => ({
   locations: many(locations),
 }));
 
-export const locationsRelations = relations(locations, ({ one }) => ({
+export const locationsRelations = relations(locations, ({ one, many }) => ({
   ock: one(ocks, {
     fields: [locations.ockName],
     references: [ocks.name],
+  }),
+  submissions: many(scavengerHuntSubmissions),
+}));
+
+// Scavenger Hunt Relations
+export const scavengerHuntParticipantsRelations = relations(scavengerHuntParticipants, ({ one, many }) => ({
+  user: one(users, {
+    fields: [scavengerHuntParticipants.userId],
+    references: [users.id],
+  }),
+  submissions: many(scavengerHuntSubmissions),
+}));
+
+export const scavengerHuntSubmissionsRelations = relations(scavengerHuntSubmissions, ({ one }) => ({
+  participant: one(scavengerHuntParticipants, {
+    fields: [scavengerHuntSubmissions.participantId],
+    references: [scavengerHuntParticipants.id],
+  }),
+  ock: one(ocks, {
+    fields: [scavengerHuntSubmissions.ockId],
+    references: [ocks.id],
+  }),
+  location: one(locations, {
+    fields: [scavengerHuntSubmissions.locationId],
+    references: [locations.id],
   }),
 }));
 
@@ -133,6 +195,22 @@ export const insertLocationSchema = createInsertSchema(locations).omit({
   id: true,
 });
 
+export const insertScavengerHuntParticipantSchema = createInsertSchema(scavengerHuntParticipants).omit({
+  id: true,
+  joinedAt: true,
+  completedAt: true,
+});
+
+export const insertScavengerHuntSubmissionSchema = createInsertSchema(scavengerHuntSubmissions).omit({
+  id: true,
+  submittedAt: true,
+  verifiedAt: true,
+});
+
+export const insertScavengerHuntPrizeSchema = createInsertSchema(scavengerHuntPrizes).omit({
+  id: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type LoginUser = z.infer<typeof loginUserSchema>;
@@ -149,3 +227,9 @@ export type InsertMerchandise = z.infer<typeof insertMerchandiseSchema>;
 export type Merchandise = typeof merchandise.$inferSelect;
 export type InsertLocation = z.infer<typeof insertLocationSchema>;
 export type Location = typeof locations.$inferSelect;
+export type InsertScavengerHuntParticipant = z.infer<typeof insertScavengerHuntParticipantSchema>;
+export type ScavengerHuntParticipant = typeof scavengerHuntParticipants.$inferSelect;
+export type InsertScavengerHuntSubmission = z.infer<typeof insertScavengerHuntSubmissionSchema>;
+export type ScavengerHuntSubmission = typeof scavengerHuntSubmissions.$inferSelect;
+export type InsertScavengerHuntPrize = z.infer<typeof insertScavengerHuntPrizeSchema>;
+export type ScavengerHuntPrize = typeof scavengerHuntPrizes.$inferSelect;

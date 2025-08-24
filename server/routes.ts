@@ -7,17 +7,27 @@ import {
   mysteryBoxes, 
   cartItems, 
   emailSignups,
+  scavengerHuntParticipants,
+  scavengerHuntSubmissions,
+  scavengerHuntPrizes,
+  ocks,
+  locations,
   type InsertUser, 
   type InsertMysteryBox,
   type InsertCartItem,
   type InsertEmailSignup,
+  type InsertScavengerHuntParticipant,
+  type InsertScavengerHuntSubmission,
   insertUserSchema,
   insertMysteryBoxSchema,
   insertCartItemSchema,
   insertEmailSignupSchema,
+  insertScavengerHuntParticipantSchema,
+  insertScavengerHuntSubmissionSchema,
+  insertScavengerHuntPrizeSchema,
   loginUserSchema
 } from "@shared/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc, count } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -224,6 +234,168 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Login error:', error);
       res.status(400).json({ error: "Invalid login data" });
+    }
+  });
+
+  // Scavenger Hunt Routes
+  
+  // Join the scavenger hunt
+  app.post("/api/scavenger-hunt/join", async (req, res) => {
+    try {
+      const { userId } = req.body;
+      
+      if (!userId) {
+        return res.status(400).json({ error: "User ID required" });
+      }
+
+      // Check if user already joined
+      const [existingParticipant] = await db
+        .select()
+        .from(scavengerHuntParticipants)
+        .where(eq(scavengerHuntParticipants.userId, userId));
+      
+      if (existingParticipant) {
+        return res.status(409).json({ error: "Already joined the hunt" });
+      }
+
+      const [participant] = await db
+        .insert(scavengerHuntParticipants)
+        .values({ userId })
+        .returning();
+      
+      res.json({ participant });
+    } catch (error) {
+      console.error('Scavenger hunt join error:', error);
+      res.status(500).json({ error: "Failed to join scavenger hunt" });
+    }
+  });
+
+  // Get leaderboard
+  app.get("/api/scavenger-hunt/leaderboard", async (req, res) => {
+    try {
+      const leaderboard = await db
+        .select({
+          id: scavengerHuntParticipants.id,
+          username: users.email, // Using email as username for now
+          totalOcksFound: scavengerHuntParticipants.totalOcksFound,
+          totalPoints: scavengerHuntParticipants.totalPoints,
+          status: scavengerHuntParticipants.status,
+        })
+        .from(scavengerHuntParticipants)
+        .leftJoin(users, eq(scavengerHuntParticipants.userId, users.id))
+        .orderBy(desc(scavengerHuntParticipants.totalPoints))
+        .limit(50);
+      
+      res.json(leaderboard);
+    } catch (error) {
+      console.error('Leaderboard error:', error);
+      res.status(500).json({ error: "Failed to fetch leaderboard" });
+    }
+  });
+
+  // Get available prizes
+  app.get("/api/scavenger-hunt/prizes", async (req, res) => {
+    try {
+      const prizes = await db
+        .select()
+        .from(scavengerHuntPrizes)
+        .where(eq(scavengerHuntPrizes.available, true))
+        .orderBy(scavengerHuntPrizes.minPoints);
+      
+      res.json(prizes);
+    } catch (error) {
+      console.error('Prizes error:', error);
+      res.status(500).json({ error: "Failed to fetch prizes" });
+    }
+  });
+
+  // Create a prize (admin function)
+  app.post("/api/scavenger-hunt/prizes", async (req, res) => {
+    try {
+      const prizeData = insertScavengerHuntPrizeSchema.parse(req.body);
+      
+      const [prize] = await db
+        .insert(scavengerHuntPrizes)
+        .values(prizeData)
+        .returning();
+      
+      res.json({ prize });
+    } catch (error) {
+      console.error('Prize creation error:', error);
+      res.status(400).json({ error: "Invalid prize data" });
+    }
+  });
+
+  // Submit a photo for verification
+  app.post("/api/scavenger-hunt/submit", async (req, res) => {
+    try {
+      const submissionData = insertScavengerHuntSubmissionSchema.parse(req.body);
+      
+      // Check if this participant already submitted for this ock
+      const [existingSubmission] = await db
+        .select()
+        .from(scavengerHuntSubmissions)
+        .where(and(
+          eq(scavengerHuntSubmissions.participantId, submissionData.participantId),
+          eq(scavengerHuntSubmissions.ockId, submissionData.ockId)
+        ));
+      
+      if (existingSubmission) {
+        return res.status(409).json({ error: "Already submitted for this Ock" });
+      }
+
+      // Calculate points based on rarity
+      let points = 10; // base points
+      switch (submissionData.figurineRarity) {
+        case 'rare': points = 25; break;
+        case 'elite': points = 50; break;
+        case 'legendary': points = 100; break;
+      }
+
+      const [submission] = await db
+        .insert(scavengerHuntSubmissions)
+        .values({ ...submissionData, points })
+        .returning();
+      
+      res.json({ submission });
+    } catch (error) {
+      console.error('Submission error:', error);
+      res.status(400).json({ error: "Invalid submission data" });
+    }
+  });
+
+  // Get participant's progress
+  app.get("/api/scavenger-hunt/progress/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      const [participant] = await db
+        .select()
+        .from(scavengerHuntParticipants)
+        .where(eq(scavengerHuntParticipants.userId, userId));
+      
+      if (!participant) {
+        return res.status(404).json({ error: "Not participating in hunt" });
+      }
+
+      const submissions = await db
+        .select({
+          id: scavengerHuntSubmissions.id,
+          ockName: ocks.name,
+          figurineRarity: scavengerHuntSubmissions.figurineRarity,
+          verificationStatus: scavengerHuntSubmissions.verificationStatus,
+          points: scavengerHuntSubmissions.points,
+          submittedAt: scavengerHuntSubmissions.submittedAt,
+        })
+        .from(scavengerHuntSubmissions)
+        .leftJoin(ocks, eq(scavengerHuntSubmissions.ockId, ocks.id))
+        .where(eq(scavengerHuntSubmissions.participantId, participant.id))
+        .orderBy(desc(scavengerHuntSubmissions.submittedAt));
+      
+      res.json({ participant, submissions });
+    } catch (error) {
+      console.error('Progress error:', error);
+      res.status(500).json({ error: "Failed to fetch progress" });
     }
   });
 
