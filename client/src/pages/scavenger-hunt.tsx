@@ -41,17 +41,17 @@ export default function ScavengerHunt() {
   });
 
   const joinHuntMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/scavenger-hunt/join"),
+    mutationFn: () => apiRequest("POST", "/api/scavenger-hunt/join", { userId: 1 }), // Demo with user ID 1
     onSuccess: () => {
       toast({
         title: "Welcome to the Hunt!",
         description: "You've successfully joined NYC's biggest scavenger hunt!",
       });
     },
-    onError: () => {
+    onError: (error: any) => {
       toast({
         title: "Error",
-        description: "Failed to join the scavenger hunt. Please try again.",
+        description: error.message || "Failed to join the scavenger hunt. Please try again.",
         variant: "destructive",
       });
     },
@@ -111,14 +111,19 @@ export default function ScavengerHunt() {
             </div>
           </div>
 
-          <Button 
-            onClick={() => joinHuntMutation.mutate()}
-            disabled={joinHuntMutation.isPending}
-            size="lg"
-            className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
-          >
-            {joinHuntMutation.isPending ? "Joining..." : "Join the Hunt"}
-          </Button>
+          <div className="space-y-4">
+            <Button 
+              onClick={() => joinHuntMutation.mutate()}
+              disabled={joinHuntMutation.isPending}
+              size="lg"
+              className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+            >
+              {joinHuntMutation.isPending ? "Joining..." : "Join the Hunt"}
+            </Button>
+            <p className="text-sm text-gray-600 max-w-md mx-auto">
+              *First purchase mystery boxes to get your figurines, then use our Ocky Map to find the real Ocks!
+            </p>
+          </div>
         </div>
       </section>
 
