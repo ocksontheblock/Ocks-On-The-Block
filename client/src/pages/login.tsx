@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 
@@ -22,6 +23,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function Login() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -34,7 +36,7 @@ export default function Login() {
   const loginMutation = useMutation({
     mutationFn: (data: LoginForm) => apiRequest("POST", "/api/auth/login", data),
     onSuccess: (response: any) => {
-      localStorage.setItem("user", JSON.stringify(response.user));
+      login(response.user); // This will update both React state and localStorage
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
