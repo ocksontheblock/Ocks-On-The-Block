@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 
@@ -27,6 +28,7 @@ type SignupForm = z.infer<typeof signupSchema>;
 export default function Signup() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const { login } = useAuth();
 
   const form = useForm<SignupForm>({
     resolver: zodResolver(signupSchema),
@@ -42,7 +44,7 @@ export default function Signup() {
     mutationFn: (data: Omit<SignupForm, 'confirmPassword'>) => 
       apiRequest("POST", "/api/auth/register", data),
     onSuccess: (response: any) => {
-      localStorage.setItem("user", JSON.stringify(response.user));
+      login(response.user); // This will update both React state and localStorage
       toast({
         title: "Welcome to Ocks on the Block!",
         description: "Your account has been created successfully.",
