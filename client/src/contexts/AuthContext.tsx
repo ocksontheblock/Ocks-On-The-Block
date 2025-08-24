@@ -23,6 +23,7 @@ interface AuthContextType {
   login: (user: User) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
   refreshSession: () => void;
 }
 
@@ -37,6 +38,7 @@ const MAX_FAILED_ATTEMPTS = 3; // Max failed session validations before logout
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [sessionCheckInterval, setSessionCheckInterval] = useState<NodeJS.Timeout | null>(null);
   const [failedAttempts, setFailedAttempts] = useState(0);
 
@@ -281,6 +283,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     initializeAuth();
+    setIsLoading(false);
 
     // Activity tracking - refresh session on user interaction
     const handleUserActivity = () => {
@@ -351,7 +354,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, refreshSession }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isLoading, refreshSession }}>
       {children}
     </AuthContext.Provider>
   );
