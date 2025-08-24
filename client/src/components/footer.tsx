@@ -49,8 +49,8 @@ export default function Footer() {
               and related content are protected by copyright, trademark, and other intellectual 
               property laws. Unauthorized reproduction, distribution, or use is strictly prohibited.
             </p>
-            <p className="text-gray-600 text-xs">
-              Designed with respect for NYC corner store culture | Made in Brooklyn
+            <p className="text-gray-600 text-xs font-bold">
+              Designed with respect for NYC corner store culture
             </p>
           </div>
         </div>
