@@ -148,7 +148,7 @@ export default function ScavengerHunt() {
                 <Button 
                   onClick={() => window.location.href = '/signup'}
                   size="lg"
-                  className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 opacity-100 visible"
+                  className="bg-black text-white hover:bg-ock-orange hover:text-black font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 border-2 border-black"
                   data-testid="button-signup-hunt"
                 >
                   Sign Up to Join the Hunt
