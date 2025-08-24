@@ -30,7 +30,7 @@ interface Prize {
 export default function ScavengerHunt() {
   const [selectedRarity, setSelectedRarity] = useState("all");
   const { toast } = useToast();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   // Fetch leaderboard data
   const { data: leaderboard = [], isLoading: leaderboardLoading } = useQuery<LeaderboardEntry[]>({
@@ -117,7 +117,12 @@ export default function ScavengerHunt() {
           </div>
 
           <div className="flex flex-col items-center space-y-6">
-            {isAuthenticated ? (
+            {isLoading ? (
+              <div className="flex flex-col items-center space-y-4">
+                <div className="animate-spin w-8 h-8 border-4 border-ock-orange border-t-transparent rounded-full"></div>
+                <p className="text-gray-600">Loading...</p>
+              </div>
+            ) : isAuthenticated ? (
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <Button 
                   onClick={() => joinHuntMutation.mutate()}
@@ -143,7 +148,7 @@ export default function ScavengerHunt() {
                 <Button 
                   onClick={() => window.location.href = '/signup'}
                   size="lg"
-                  className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300 opacity-100 visible"
                   data-testid="button-signup-hunt"
                 >
                   Sign Up to Join the Hunt
