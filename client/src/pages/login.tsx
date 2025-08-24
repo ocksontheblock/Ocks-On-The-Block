@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
+import { ArrowLeft } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -53,7 +54,15 @@ export default function Login() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4 relative">
+      <Button
+        onClick={() => navigate("/")}
+        variant="ghost"
+        className="absolute top-4 left-4 flex items-center space-x-2 hover:bg-white/20"
+      >
+        <ArrowLeft className="h-4 w-4" />
+        <span>Back to Menu</span>
+      </Button>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-anton">Welcome Back</CardTitle>

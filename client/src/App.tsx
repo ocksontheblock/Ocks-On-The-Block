@@ -12,6 +12,7 @@ import OckyDrip from "@/pages/ocky-drip";
 import OckyMap from "@/pages/ocky-map";
 import ScavengerHunt from "@/pages/scavenger-hunt";
 import BuyOcks from "@/pages/buy-ocks";
+import Cart from "@/pages/cart";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
 import Login from "@/pages/login";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/ocky-map" component={OckyMap} />
       <Route path="/scavenger-hunt" component={ScavengerHunt} />
       <Route path="/buy-ocks" component={BuyOcks} />
+      <Route path="/cart" component={Cart} />
       <Route path="/submit-photo" component={SubmitPhoto} />
       <Route path="/inventory" component={Inventory} />
       <Route path="/admin" component={AdminDashboard} />

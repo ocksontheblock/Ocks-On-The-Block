@@ -33,9 +33,7 @@ import bcrypt from "bcrypt";
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2023-10-16",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Email signup route
@@ -75,7 +73,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // User authentication routes
-  app.post("/api/register", async (req, res) => {
+  app.post("/api/auth/register", async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
       
@@ -100,7 +98,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/login", async (req, res) => {
+  app.post("/api/auth/login", async (req, res) => {
     try {
       const loginData = loginUserSchema.parse(req.body);
       
@@ -163,7 +161,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Update quantity
         const [updatedItem] = await db
           .update(cartItems)
-          .set({ quantity: existingItem.quantity + (cartData.quantity || 1) })
+          .set({ quantity: (existingItem.quantity || 0) + (cartData.quantity || 1) })
           .where(eq(cartItems.id, existingItem.id))
           .returning();
         
@@ -172,6 +170,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const [cartItem] = await db.insert(cartItems).values(cartData).returning();
       res.json({ cartItem });
+    } catch (error) {
+      res.status(400).json({ error: "Invalid cart data" });
+    }
+  });
+
+  app.put("/api/cart/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { quantity } = req.body;
+      
+      const [updatedItem] = await db
+        .update(cartItems)
+        .set({ quantity })
+        .where(eq(cartItems.id, id))
+        .returning();
+      
+      res.json({ cartItem: updatedItem });
     } catch (error) {
       res.status(400).json({ error: "Invalid cart data" });
     }
