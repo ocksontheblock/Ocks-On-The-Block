@@ -5,6 +5,7 @@ import AmpedOckShowcase from "@/components/amped-ock-showcase";
 import Footer from "@/components/footer";
 import EmailSignupModal from "@/components/email-signup-modal";
 import Logo from "@/components/logo";
+import logoPath from "@assets/05510F49-8788-4872-9022-591FAA016F73_1756020759938.png";
 
 export default function Home() {
   const [showSignupModal, setShowSignupModal] = useState(false);
@@ -33,9 +34,13 @@ export default function Home() {
         
         <div className="text-center max-w-5xl mx-auto relative z-10">
           <div className="mb-12">
-            <h1 className="font-anton text-6xl md:text-8xl lg:text-9xl mb-6 text-gray-900">
-              Ocks on the Block
-            </h1>
+            <div className="flex justify-center mb-8">
+              <img 
+                src={logoPath} 
+                alt="Ocks on the Block - Ockwear for Everywhere" 
+                className="w-full max-w-lg md:max-w-2xl h-auto transform hover:scale-105 transition-all duration-500 drop-shadow-2xl"
+              />
+            </div>
           </div>
           
           <div className="space-y-6 mb-12">
