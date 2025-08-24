@@ -116,14 +116,15 @@ export default function ScavengerHunt() {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="flex flex-col items-center space-y-6">
             {isAuthenticated ? (
-              <div className="space-x-4">
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <Button 
                   onClick={() => joinHuntMutation.mutate()}
                   disabled={joinHuntMutation.isPending}
                   size="lg"
                   className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                  data-testid="button-join-hunt"
                 >
                   {joinHuntMutation.isPending ? "Joining..." : "Join the Hunt"}
                 </Button>
@@ -132,21 +133,23 @@ export default function ScavengerHunt() {
                   size="lg"
                   variant="outline"
                   className="border-ock-orange text-ock-orange hover:bg-ock-orange hover:text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                  data-testid="button-submit-photo"
                 >
                   Submit Hunt Photo
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4">
+              <div className="flex flex-col items-center space-y-4">
                 <Button 
                   onClick={() => window.location.href = '/signup'}
                   size="lg"
                   className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                  data-testid="button-signup-hunt"
                 >
                   Sign Up to Join the Hunt
                 </Button>
-                <p className="text-sm text-gray-600">
-                  Already have an account? <a href="/login" className="text-ock-orange hover:underline">Sign in here</a>
+                <p className="text-sm text-gray-600 text-center">
+                  Already have an account? <a href="/login" className="text-ock-orange hover:underline font-semibold">Sign in here</a>
                 </p>
               </div>
             )}
