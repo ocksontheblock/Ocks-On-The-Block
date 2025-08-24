@@ -10,6 +10,7 @@ import Home from "@/pages/home";
 import About from "@/pages/about";
 import OckyDrip from "@/pages/ocky-drip";
 import OckyMap from "@/pages/ocky-map";
+import ScavengerHunt from "@/pages/scavenger-hunt";
 import BuyOcks from "@/pages/buy-ocks";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/about" component={About} />
       <Route path="/ocky-drip" component={OckyDrip} />
       <Route path="/ocky-map" component={OckyMap} />
+      <Route path="/scavenger-hunt" component={ScavengerHunt} />
       <Route path="/buy-ocks" component={BuyOcks} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/payment-success" component={PaymentSuccess} />
