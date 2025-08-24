@@ -43,8 +43,8 @@ export default function Signup() {
   const signupMutation = useMutation({
     mutationFn: (data: Omit<SignupForm, 'confirmPassword'>) => 
       apiRequest("POST", "/api/auth/register", data),
-    onSuccess: (response: any) => {
-      login(response.user); // This will update both React state and localStorage
+    onSuccess: async (response: any) => {
+      await login(response.user); // This will update both React state and localStorage
       toast({
         title: "Welcome to Ocks on the Block!",
         description: "Your account has been created successfully.",

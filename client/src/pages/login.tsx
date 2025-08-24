@@ -35,8 +35,8 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginForm) => apiRequest("POST", "/api/auth/login", data),
-    onSuccess: (response: any) => {
-      login(response.user); // This will update both React state and localStorage
+    onSuccess: async (response: any) => {
+      await login(response.user); // This will update both React state and localStorage
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
