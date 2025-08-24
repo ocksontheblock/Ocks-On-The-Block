@@ -94,12 +94,12 @@ export default function MysteryBoxSection() {
                         name: box.name,
                         description: box.description
                       });
-                      window.location.href = `/checkout?${params.toString()}`;
+                      window.location.href = `/cart?${params.toString()}`;
                     }}
-                    className="bg-gradient-to-r from-ock-orange to-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:from-red-500 hover:to-ock-orange transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    className="bg-black text-white px-4 py-2 rounded-lg font-semibold hover:bg-ock-orange hover:text-black transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-black"
                     data-testid={`button-buy-${box.name.toLowerCase().replace(/\s+/g, '-')}`}
                   >
-                    Buy Now
+                    Add to Cart
                   </button>
                 </div>
               </div>
