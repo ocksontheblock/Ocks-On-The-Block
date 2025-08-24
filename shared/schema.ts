@@ -5,6 +5,7 @@ import { relations } from "drizzle-orm";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
   firstName: text("first_name"),
@@ -221,6 +222,8 @@ export const scavengerHuntSubmissionsRelations = relations(scavengerHuntSubmissi
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
+}).extend({
+  username: z.string().min(3, "Username must be at least 3 characters"),
 });
 
 export const loginUserSchema = z.object({

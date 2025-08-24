@@ -207,14 +207,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userData = insertUserSchema.parse(req.body);
       
-      // Check if user already exists
-      const [existingUser] = await db
+      // Check if email already exists
+      const [existingEmail] = await db
         .select()
         .from(users)
         .where(eq(users.email, userData.email));
       
-      if (existingUser) {
-        return res.status(409).json({ error: "User already exists" });
+      if (existingEmail) {
+        return res.status(409).json({ error: "Email already exists" });
+      }
+
+      // Check if username already exists
+      const [existingUsername] = await db
+        .select()
+        .from(users)
+        .where(eq(users.username, userData.username!));
+      
+      if (existingUsername) {
+        return res.status(409).json({ error: "Username already exists" });
       }
       
       // Hash password
