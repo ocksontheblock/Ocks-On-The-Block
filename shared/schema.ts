@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -78,14 +78,17 @@ export const scavengerHuntParticipants = pgTable("scavenger_hunt_participants", 
 export const scavengerHuntSubmissions = pgTable("scavenger_hunt_submissions", {
   id: serial("id").primaryKey(),
   participantId: integer("participant_id").references(() => scavengerHuntParticipants.id).notNull(),
+  figurineId: integer("figurine_id").references(() => userFigurines.id), // Link to owned figurine
   ockId: integer("ock_id").references(() => ocks.id).notNull(),
   locationId: integer("location_id").references(() => locations.id).notNull(),
   photoUrl: text("photo_url").notNull(),
   figurineRarity: text("figurine_rarity").notNull(), // common, rare, elite, legendary
+  gpsCoordinates: varchar("gps_coordinates"),
   verificationStatus: text("verification_status").notNull().default("pending"), // pending, approved, rejected
   points: integer("points").default(0),
   submittedAt: timestamp("submitted_at").defaultNow(),
   verifiedAt: timestamp("verified_at"),
+  reviewedBy: integer("reviewed_by").references(() => users.id),
   adminNotes: text("admin_notes"),
 });
 
@@ -99,6 +102,31 @@ export const scavengerHuntPrizes = pgTable("scavenger_hunt_prizes", {
   prizeValue: decimal("prize_value", { precision: 10, scale: 2 }).notNull(),
   image: text("image"),
   available: boolean("available").default(true),
+});
+
+// User mystery box purchases
+export const userMysteryBoxes = pgTable("user_mystery_boxes", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  mysteryBoxId: integer("mystery_box_id").references(() => mysteryBoxes.id),
+  purchaseDate: timestamp("purchase_date").defaultNow(),
+  stripePaymentId: varchar("stripe_payment_id"),
+  isOpened: boolean("is_opened").default(false),
+  figuresReceived: jsonb("figures_received"), // Array of figurines received
+});
+
+// User figurine inventory
+export const userFigurines = pgTable("user_figurines", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  figurineId: varchar("figurine_id").notNull(), // Unique ID for each figurine type
+  figurineName: varchar("figurine_name").notNull(),
+  rarity: varchar("rarity").notNull(), // 'common', 'rare', 'elite', 'legendary'
+  borough: varchar("borough").notNull(),
+  ockName: varchar("ock_name").notNull(),
+  acquiredDate: timestamp("acquired_date").defaultNow(),
+  mysteryBoxPurchaseId: integer("mystery_box_purchase_id").references(() => userMysteryBoxes.id),
+  isUsedInHunt: boolean("is_used_in_hunt").default(false),
 });
 
 // Relations
@@ -133,6 +161,30 @@ export const locationsRelations = relations(locations, ({ one, many }) => ({
   submissions: many(scavengerHuntSubmissions),
 }));
 
+export const userMysteryBoxesRelations = relations(userMysteryBoxes, ({ one, many }) => ({
+  user: one(users, {
+    fields: [userMysteryBoxes.userId],
+    references: [users.id],
+  }),
+  mysteryBox: one(mysteryBoxes, {
+    fields: [userMysteryBoxes.mysteryBoxId],
+    references: [mysteryBoxes.id],
+  }),
+  figurines: many(userFigurines),
+}));
+
+export const userFigurinesRelations = relations(userFigurines, ({ one, many }) => ({
+  user: one(users, {
+    fields: [userFigurines.userId],
+    references: [users.id],
+  }),
+  mysteryBoxPurchase: one(userMysteryBoxes, {
+    fields: [userFigurines.mysteryBoxPurchaseId],
+    references: [userMysteryBoxes.id],
+  }),
+  huntSubmissions: many(scavengerHuntSubmissions),
+}));
+
 // Scavenger Hunt Relations
 export const scavengerHuntParticipantsRelations = relations(scavengerHuntParticipants, ({ one, many }) => ({
   user: one(users, {
@@ -147,6 +199,10 @@ export const scavengerHuntSubmissionsRelations = relations(scavengerHuntSubmissi
     fields: [scavengerHuntSubmissions.participantId],
     references: [scavengerHuntParticipants.id],
   }),
+  figurine: one(userFigurines, {
+    fields: [scavengerHuntSubmissions.figurineId],
+    references: [userFigurines.id],
+  }),
   ock: one(ocks, {
     fields: [scavengerHuntSubmissions.ockId],
     references: [ocks.id],
@@ -154,6 +210,10 @@ export const scavengerHuntSubmissionsRelations = relations(scavengerHuntSubmissi
   location: one(locations, {
     fields: [scavengerHuntSubmissions.locationId],
     references: [locations.id],
+  }),
+  reviewer: one(users, {
+    fields: [scavengerHuntSubmissions.reviewedBy],
+    references: [users.id],
   }),
 }));
 

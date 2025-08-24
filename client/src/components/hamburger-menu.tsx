@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { User, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [, setLocation] = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -12,6 +15,12 @@ export default function HamburgerMenu() {
   const handleLinkClick = (path: string) => {
     setLocation(path);
     setIsOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    setIsOpen(false);
+    setLocation('/');
   };
 
   return (
@@ -79,6 +88,46 @@ export default function HamburgerMenu() {
           >
             Scavenger Hunt
           </button>
+          
+          {/* Authentication Section */}
+          <div className="border-t border-white border-opacity-20 mt-8 pt-6">
+            {isAuthenticated ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-center text-white text-lg mb-4">
+                  <User className="h-5 w-5 mr-2" />
+                  <span>{user?.username}</span>
+                </div>
+                <button
+                  onClick={() => handleLinkClick('/inventory')}
+                  className="block text-white text-2xl hover:text-ock-orange transition-colors duration-300"
+                >
+                  My Collection
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center text-white text-2xl hover:text-ock-orange transition-colors duration-300 mx-auto"
+                >
+                  <LogOut className="h-6 w-6 mr-2" />
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <button
+                  onClick={() => handleLinkClick('/login')}
+                  className="block text-white text-2xl hover:text-ock-orange transition-colors duration-300"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => handleLinkClick('/signup')}
+                  className="block text-white text-2xl hover:text-ock-orange transition-colors duration-300"
+                >
+                  Join the Hunt
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </nav>
