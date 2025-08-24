@@ -74,7 +74,7 @@ export default function AmpedOckShowcase() {
         <div className="text-center mt-12">
           <button 
             onClick={() => window.location.href = '/buy-ocks'}
-            className="bg-gradient-to-r from-ock-orange to-red-500 text-white py-4 px-8 rounded-2xl font-bold hover:from-red-500 hover:to-ock-orange transition-all duration-300 transform hover:scale-105 shadow-lg text-lg"
+            className="bg-black text-white py-4 px-8 rounded-2xl font-bold hover:bg-ock-orange hover:text-black transition-all duration-300 transform hover:scale-105 shadow-lg text-lg border-2 border-black"
           >
             Get Your Amped Ock Mystery Box
           </button>
