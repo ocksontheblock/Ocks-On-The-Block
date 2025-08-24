@@ -28,7 +28,7 @@ interface Location {
 
 export default function SubmitPhoto() {
   const [, navigate] = useLocation();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const { toast } = useToast();
   const [selectedOck, setSelectedOck] = useState<number | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
@@ -80,7 +80,18 @@ export default function SubmitPhoto() {
     },
   });
 
-  // Redirect if not authenticated
+  // Show loading or redirect if not authenticated  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-ock-orange border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading photo submission...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center px-4">

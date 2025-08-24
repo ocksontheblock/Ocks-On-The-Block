@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export default function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [, setLocation] = useLocation();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isLoading } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -15,6 +15,10 @@ export default function HamburgerMenu() {
   const handleLinkClick = (path: string) => {
     setLocation(path);
     setIsOpen(false);
+    // Scroll to top when navigating
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   const handleLogout = () => {
@@ -91,7 +95,11 @@ export default function HamburgerMenu() {
           
           {/* Authentication Section */}
           <div className="border-t border-white border-opacity-20 mt-8 pt-6">
-            {isAuthenticated ? (
+            {isLoading ? (
+              <div className="flex justify-center">
+                <div className="animate-spin w-6 h-6 border-2 border-white border-t-transparent rounded-full"></div>
+              </div>
+            ) : isAuthenticated ? (
               <div className="space-y-4">
                 <div className="flex items-center justify-center text-white text-lg mb-4">
                   <User className="h-5 w-5 mr-2" />
