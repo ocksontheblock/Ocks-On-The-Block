@@ -14,6 +14,12 @@ import ScavengerHunt from "@/pages/scavenger-hunt";
 import BuyOcks from "@/pages/buy-ocks";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
+import Login from "@/pages/login";
+import Signup from "@/pages/signup";
+import SubmitPhoto from "@/pages/submit-photo";
+import AdminDashboard from "@/pages/admin-dashboard";
+import Inventory from "@/pages/inventory";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 function Router() {
   return (
@@ -24,6 +30,11 @@ function Router() {
       <Route path="/ocky-map" component={OckyMap} />
       <Route path="/scavenger-hunt" component={ScavengerHunt} />
       <Route path="/buy-ocks" component={BuyOcks} />
+      <Route path="/submit-photo" component={SubmitPhoto} />
+      <Route path="/inventory" component={Inventory} />
+      <Route path="/admin" component={AdminDashboard} />
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={Signup} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/payment-success" component={PaymentSuccess} />
       <Route component={NotFound} />
@@ -49,10 +60,12 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

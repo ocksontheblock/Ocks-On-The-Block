@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import HamburgerMenu from "@/components/hamburger-menu";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ interface Prize {
 export default function ScavengerHunt() {
   const [selectedRarity, setSelectedRarity] = useState("all");
   const { toast } = useToast();
+  const { isAuthenticated, user } = useAuth();
 
   // Fetch leaderboard data
   const { data: leaderboard = [], isLoading: leaderboardLoading } = useQuery<LeaderboardEntry[]>({
@@ -41,7 +43,10 @@ export default function ScavengerHunt() {
   });
 
   const joinHuntMutation = useMutation({
-    mutationFn: () => apiRequest("POST", "/api/scavenger-hunt/join", { userId: 1 }), // Demo with user ID 1
+    mutationFn: () => {
+      if (!user?.id) throw new Error("Must be logged in to join");
+      return apiRequest("POST", "/api/scavenger-hunt/join", { userId: user.id });
+    },
     onSuccess: () => {
       toast({
         title: "Welcome to the Hunt!",
@@ -112,14 +117,39 @@ export default function ScavengerHunt() {
           </div>
 
           <div className="space-y-4">
-            <Button 
-              onClick={() => joinHuntMutation.mutate()}
-              disabled={joinHuntMutation.isPending}
-              size="lg"
-              className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
-            >
-              {joinHuntMutation.isPending ? "Joining..." : "Join the Hunt"}
-            </Button>
+            {isAuthenticated ? (
+              <div className="space-x-4">
+                <Button 
+                  onClick={() => joinHuntMutation.mutate()}
+                  disabled={joinHuntMutation.isPending}
+                  size="lg"
+                  className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  {joinHuntMutation.isPending ? "Joining..." : "Join the Hunt"}
+                </Button>
+                <Button 
+                  onClick={() => window.location.href = '/submit-photo'}
+                  size="lg"
+                  variant="outline"
+                  className="border-ock-orange text-ock-orange hover:bg-ock-orange hover:text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  Submit Hunt Photo
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Button 
+                  onClick={() => window.location.href = '/signup'}
+                  size="lg"
+                  className="bg-gradient-to-r from-ock-orange to-red-500 hover:from-red-500 hover:to-ock-orange text-white font-bold py-4 px-8 rounded-2xl shadow-xl transform hover:scale-105 transition-all duration-300"
+                >
+                  Sign Up to Join the Hunt
+                </Button>
+                <p className="text-sm text-gray-600">
+                  Already have an account? <a href="/login" className="text-ock-orange hover:underline">Sign in here</a>
+                </p>
+              </div>
+            )}
             <p className="text-sm text-gray-600 max-w-md mx-auto">
               *First purchase mystery boxes to get your figurines, then use our Ocky Map to find the real Ocks!
             </p>
