@@ -1,8 +1,8 @@
 const mysteryBoxes = [
   {
     id: 1,
-    name: "Ocky Drop: Classic",
-    description: "The everyday pull, random but always fresh.",
+    name: "Starter Pack",
+    description: "Perfect for new collectors. Contains 1-2 Common Ocks with basic gear. Great entry point to start your block rep journey.",
     price: 29,
     tier: 1,
     image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
@@ -10,8 +10,8 @@ const mysteryBoxes = [
   },
   {
     id: 2,
-    name: "Ocky Drop: Heat",
-    description: "Higher odds, hotter pulls from the block.",
+    name: "Heat Drop",
+    description: "Elevated chances for rare finds. Contains 2-3 figurines with guaranteed Rare+ Ock. Better odds, hotter pulls from the block.",
     price: 49,
     tier: 2,
     image: "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
@@ -19,8 +19,8 @@ const mysteryBoxes = [
   },
   {
     id: 3,
-    name: "Ocky Drop: Lock",
-    description: "You lock in your exact Ock, no gamble.",
+    name: "Elite Collection",
+    description: "Premium experience guaranteed. Contains 3-4 figurines including guaranteed Elite Ock with designer gear and golden accents.",
     price: 89,
     tier: 3,
     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
@@ -28,8 +28,8 @@ const mysteryBoxes = [
   },
   {
     id: 4,
-    name: "Ocky Drop: Crown",
-    description: "Top-shelf drop, rare Ock + exclusive drip.",
+    name: "Legendary Crown",
+    description: "The ultimate collector's dream. Contains 4-5 figurines with guaranteed Legendary Ock featuring luxury suit and platinum-crystal base.",
     price: 149,
     tier: 4,
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
@@ -48,9 +48,15 @@ export default function MysteryBoxSection() {
           <p className="text-xl md:text-2xl text-ock-orange mb-4 font-semibold">
             Not just a figure — a piece of the block.
           </p>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Each mystery box contains an authentic Ock figure representing real NYC corner store culture. 
-            Choose your tier and discover which legend you'll add to your collection.
+          <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+            Step into the world of NYC's corner store legends. Each mystery box contains hand-crafted figurines 
+            representing the realest Ocks across all five boroughs. From the bodega warriors of Washington Heights 
+            to the corner store kings of Bed-Stuy, these aren't just collectibles – they're pieces of NYC culture.
+          </p>
+          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            Collect your crew, find them in real life, and compete for the ultimate prize: 
+            <span className="text-ock-orange font-bold"> $10,000 cash</span> in our citywide scavenger hunt. 
+            The streets are calling – answer with your collection.
           </p>
         </div>
 

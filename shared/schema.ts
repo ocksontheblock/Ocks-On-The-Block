@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb, varchar, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -12,7 +12,11 @@ export const users = pgTable("users", {
   lastName: text("last_name"),
   emailAlerts: boolean("email_alerts").default(true),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  emailIdx: index("users_email_idx").on(table.email),
+  usernameIdx: index("users_username_idx").on(table.username),
+  createdAtIdx: index("users_created_at_idx").on(table.createdAt),
+}));
 
 export const mysteryBoxes = pgTable("mystery_boxes", {
   id: serial("id").primaryKey(),
@@ -31,14 +35,21 @@ export const cartItems = pgTable("cart_items", {
   mysteryBoxId: integer("mystery_box_id").references(() => mysteryBoxes.id),
   quantity: integer("quantity").default(1),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index("cart_items_user_id_idx").on(table.userId),
+  mysteryBoxIdIdx: index("cart_items_mystery_box_id_idx").on(table.mysteryBoxId),
+}));
 
 export const emailSignups = pgTable("email_signups", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   subscribedAt: timestamp("subscribed_at").defaultNow(),
   active: boolean("active").default(true),
-});
+}, (table) => ({
+  emailIdx: index("email_signups_email_idx").on(table.email),
+  activeIdx: index("email_signups_active_idx").on(table.active),
+  subscribedAtIdx: index("email_signups_subscribed_at_idx").on(table.subscribedAt),
+}));
 
 export const ocks = pgTable("ocks", {
   id: serial("id").primaryKey(),
@@ -74,7 +85,12 @@ export const scavengerHuntParticipants = pgTable("scavenger_hunt_participants", 
   totalPoints: integer("total_points").default(0),
   joinedAt: timestamp("joined_at").defaultNow(),
   completedAt: timestamp("completed_at"),
-});
+}, (table) => ({
+  userIdIdx: index("scavenger_hunt_participants_user_id_idx").on(table.userId),
+  statusIdx: index("scavenger_hunt_participants_status_idx").on(table.status),
+  totalPointsIdx: index("scavenger_hunt_participants_total_points_idx").on(table.totalPoints),
+  joinedAtIdx: index("scavenger_hunt_participants_joined_at_idx").on(table.joinedAt),
+}));
 
 export const scavengerHuntSubmissions = pgTable("scavenger_hunt_submissions", {
   id: serial("id").primaryKey(),
@@ -91,7 +107,14 @@ export const scavengerHuntSubmissions = pgTable("scavenger_hunt_submissions", {
   verifiedAt: timestamp("verified_at"),
   reviewedBy: integer("reviewed_by").references(() => users.id),
   adminNotes: text("admin_notes"),
-});
+}, (table) => ({
+  participantIdIdx: index("scavenger_hunt_submissions_participant_id_idx").on(table.participantId),
+  ockIdIdx: index("scavenger_hunt_submissions_ock_id_idx").on(table.ockId),
+  locationIdIdx: index("scavenger_hunt_submissions_location_id_idx").on(table.locationId),
+  verificationStatusIdx: index("scavenger_hunt_submissions_verification_status_idx").on(table.verificationStatus),
+  submittedAtIdx: index("scavenger_hunt_submissions_submitted_at_idx").on(table.submittedAt),
+  pointsIdx: index("scavenger_hunt_submissions_points_idx").on(table.points),
+}));
 
 export const scavengerHuntPrizes = pgTable("scavenger_hunt_prizes", {
   id: serial("id").primaryKey(),
@@ -114,7 +137,11 @@ export const userMysteryBoxes = pgTable("user_mystery_boxes", {
   stripePaymentId: varchar("stripe_payment_id"),
   isOpened: boolean("is_opened").default(false),
   figuresReceived: jsonb("figures_received"), // Array of figurines received
-});
+}, (table) => ({
+  userIdIdx: index("user_mystery_boxes_user_id_idx").on(table.userId),
+  purchaseDateIdx: index("user_mystery_boxes_purchase_date_idx").on(table.purchaseDate),
+  stripePaymentIdIdx: index("user_mystery_boxes_stripe_payment_id_idx").on(table.stripePaymentId),
+}));
 
 // User figurine inventory
 export const userFigurines = pgTable("user_figurines", {
@@ -128,7 +155,13 @@ export const userFigurines = pgTable("user_figurines", {
   acquiredDate: timestamp("acquired_date").defaultNow(),
   mysteryBoxPurchaseId: integer("mystery_box_purchase_id").references(() => userMysteryBoxes.id),
   isUsedInHunt: boolean("is_used_in_hunt").default(false),
-});
+}, (table) => ({
+  userIdIdx: index("user_figurines_user_id_idx").on(table.userId),
+  rarityIdx: index("user_figurines_rarity_idx").on(table.rarity),
+  boroughIdx: index("user_figurines_borough_idx").on(table.borough),
+  acquiredDateIdx: index("user_figurines_acquired_date_idx").on(table.acquiredDate),
+  mysteryBoxPurchaseIdIdx: index("user_figurines_mystery_box_purchase_id_idx").on(table.mysteryBoxPurchaseId),
+}));
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
