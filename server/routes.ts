@@ -2,6 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "./db";
 import { sendWelcomeEmail } from "./emailService";
+import { authRateLimit, signupRateLimit, emailSignupRateLimit, apiRateLimit } from "./rateLimiting";
+import { optimizeSession, cacheUser, getCachedUser, clearUserCache, monitorDatabasePerformance } from "./sessionOptimizations";
+import { addSecurityHeaders, sanitizeUserInput, validatePasswordStrength, detectSuspiciousActivity, validateSession } from "./securityMiddleware";
 import Stripe from "stripe";
 import { 
   users, 
@@ -37,8 +40,19 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Email signup route
-  app.post("/api/email-signup", async (req, res) => {
+  // Add security middleware
+  app.use(addSecurityHeaders);
+  app.use(detectSuspiciousActivity);
+  app.use(validateSession);
+  
+  // Add session optimizations middleware
+  app.use(optimizeSession);
+  
+  // Start database performance monitoring
+  monitorDatabasePerformance();
+  
+  // Email signup route with rate limiting
+  app.post("/api/email-signup", emailSignupRateLimit, async (req, res) => {
     try {
       const signupData = insertEmailSignupSchema.parse(req.body);
       
@@ -133,7 +147,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // TODO: Replace with actual purchase query from database
       // This is a placeholder until we have a proper purchases table
-      const purchases = [];
+      const purchases: any[] = [];
       
       res.json(purchases);
     } catch (error) {
@@ -269,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // User authentication routes
-  app.post("/api/auth/register", async (req, res) => {
+  app.post("/api/auth/register", signupRateLimit, async (req, res) => {
     try {
       const userData = insertUserSchema.parse(req.body);
       
@@ -283,18 +297,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(409).json({ error: "User already exists" });
       }
       
+      // Validate password strength
+      const passwordValidation = validatePasswordStrength(userData.password);
+      if (!passwordValidation.isValid) {
+        return res.status(400).json({ 
+          error: "Password does not meet security requirements",
+          details: passwordValidation.issues
+        });
+      }
+      
+      // Sanitize user input
+      userData.username = sanitizeUserInput(userData.username);
+      userData.email = sanitizeUserInput(userData.email);
+      if (userData.firstName) userData.firstName = sanitizeUserInput(userData.firstName);
+      if (userData.lastName) userData.lastName = sanitizeUserInput(userData.lastName);
+      
       // Hash password
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       userData.password = hashedPassword;
       
       const [user] = await db.insert(users).values(userData).returning();
+      
+      // Cache the new user for faster future lookups
+      cacheUser(user.id, user);
+      
       res.json({ user: { ...user, password: undefined } });
     } catch (error) {
       res.status(400).json({ error: "Invalid user data" });
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
       const loginData = loginUserSchema.parse(req.body);
       
@@ -306,6 +339,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!user || !await bcrypt.compare(loginData.password, user.password)) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
+      
+      // Cache the authenticated user
+      cacheUser(user.id, user);
       
       res.json({ user: { ...user, password: undefined } });
     } catch (error) {
@@ -438,7 +474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
       const loginData = loginUserSchema.parse(req.body);
       
@@ -450,6 +486,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!user || !await bcrypt.compare(loginData.password, user.password)) {
         return res.status(401).json({ error: "Invalid credentials" });
       }
+      
+      // Cache the authenticated user
+      cacheUser(user.id, user);
       
       res.json({ user: { ...user, password: undefined } });
     } catch (error) {
