@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "./db";
+import { sendWelcomeEmail } from "./emailService";
 import Stripe from "stripe";
 import { 
   users, 
@@ -27,7 +28,7 @@ import {
   insertScavengerHuntPrizeSchema,
   loginUserSchema
 } from "@shared/schema";
-import { eq, and, desc, count } from "drizzle-orm";
+import { eq, and, desc, count, ne } from "drizzle-orm";
 import bcrypt from "bcrypt";
 
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -56,9 +57,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .values(signupData)
         .returning();
       
+      // Send welcome email
+      try {
+        await sendWelcomeEmail(signup.email, signup.id);
+      } catch (emailError) {
+        console.error('Failed to send welcome email:', emailError);
+        // Don't fail the signup if email fails
+      }
+      
       res.json({ signup });
     } catch (error) {
       res.status(400).json({ error: "Invalid signup data" });
+    }
+  });
+
+  // Unsubscribe route
+  app.post("/api/unsubscribe", async (req, res) => {
+    try {
+      const { token } = req.body;
+      
+      if (!token) {
+        return res.status(400).json({ error: "Token required" });
+      }
+      
+      // Decode the token
+      let decodedData;
+      try {
+        const decoded = Buffer.from(token, 'base64').toString('utf-8');
+        const [id, email] = decoded.split(':');
+        decodedData = { id: parseInt(id), email };
+      } catch (error) {
+        return res.status(400).json({ error: "Invalid token" });
+      }
+      
+      // Find and update the email signup
+      const [signup] = await db
+        .select()
+        .from(emailSignups)
+        .where(and(
+          eq(emailSignups.id, decodedData.id),
+          eq(emailSignups.email, decodedData.email)
+        ));
+      
+      if (!signup) {
+        return res.status(404).json({ error: "Email subscription not found" });
+      }
+      
+      // Deactivate the subscription
+      await db
+        .update(emailSignups)
+        .set({ active: false })
+        .where(eq(emailSignups.id, signup.id));
+      
+      res.json({ email: signup.email, message: "Successfully unsubscribed" });
+    } catch (error) {
+      console.error('Unsubscribe error:', error);
+      res.status(500).json({ error: "Failed to unsubscribe" });
     }
   });
 
@@ -69,6 +123,148 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ mysteryBoxes: boxes });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch mystery boxes" });
+    }
+  });
+
+  // User account management routes
+  app.get("/api/user/purchases/:userId", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      
+      // TODO: Replace with actual purchase query from database
+      // This is a placeholder until we have a proper purchases table
+      const purchases = [];
+      
+      res.json(purchases);
+    } catch (error) {
+      console.error('Error fetching purchases:', error);
+      res.status(500).json({ error: "Failed to fetch purchases" });
+    }
+  });
+
+  app.put("/api/user/profile", async (req, res) => {
+    try {
+      // Extract user ID from session/token (placeholder for now)
+      const userId = req.body.userId; // This should come from authentication middleware
+      
+      const { username, email, firstName, lastName } = req.body;
+      
+      // Check if email is already taken by another user
+      if (email) {
+        const [existingUser] = await db
+          .select()
+          .from(users)
+          .where(and(
+            eq(users.email, email),
+            ne(users.id, userId)
+          ));
+        
+        if (existingUser) {
+          return res.status(409).json({ error: "Email already in use" });
+        }
+      }
+      
+      const [updatedUser] = await db
+        .update(users)
+        .set({
+          username,
+          email,
+          firstName,
+          lastName,
+        })
+        .where(eq(users.id, userId))
+        .returning();
+      
+      res.json({ user: { ...updatedUser, password: undefined } });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      res.status(500).json({ error: "Failed to update profile" });
+    }
+  });
+
+  app.put("/api/user/password", async (req, res) => {
+    try {
+      const userId = req.body.userId; // This should come from authentication middleware
+      const { currentPassword, newPassword } = req.body;
+      
+      // Get current user
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, userId));
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // Verify current password
+      const validPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!validPassword) {
+        return res.status(400).json({ error: "Current password is incorrect" });
+      }
+      
+      // Hash new password
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      
+      // Update password
+      await db
+        .update(users)
+        .set({ password: hashedNewPassword })
+        .where(eq(users.id, userId));
+      
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error('Error updating password:', error);
+      res.status(500).json({ error: "Failed to update password" });
+    }
+  });
+
+  app.post("/api/user/export-data", async (req, res) => {
+    try {
+      const userId = req.body.userId; // This should come from authentication middleware
+      
+      // Get user data
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, userId));
+      
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // Compile all user data
+      const userData = {
+        profile: {
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          createdAt: user.createdAt,
+        },
+        purchases: [], // TODO: Add actual purchase data
+        cartItems: [], // TODO: Add cart items if any
+        exportDate: new Date().toISOString(),
+      };
+      
+      res.json(userData);
+    } catch (error) {
+      console.error('Error exporting data:', error);
+      res.status(500).json({ error: "Failed to export data" });
+    }
+  });
+
+  app.delete("/api/user/account", async (req, res) => {
+    try {
+      const userId = req.body.userId; // This should come from authentication middleware
+      
+      // Delete user account (this will cascade to related data)
+      await db.delete(users).where(eq(users.id, userId));
+      
+      res.json({ message: "Account deleted successfully" });
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      res.status(500).json({ error: "Failed to delete account" });
     }
   });
 

@@ -38,7 +38,7 @@ export default function EmailSignupModal({ isOpen, onClose }: EmailSignupModalPr
       
       toast({
         title: "Welcome to the block!",
-        description: "You'll get first drop alerts and exclusive access to limited releases.",
+        description: "Check your email for a welcome message with all the details.",
       });
       
       form.reset();
@@ -72,7 +72,7 @@ export default function EmailSignupModal({ isOpen, onClose }: EmailSignupModalPr
             Get First Drop Alerts
           </h3>
           <p className="text-gray-600 text-sm">
-            Be the first to know about new Ock drops, limited releases, and exclusive merch.
+            Be the first to know about new Ock drops, limited releases, and exclusive merch. You'll get a welcome email with all the details!
           </p>
         </div>
 
