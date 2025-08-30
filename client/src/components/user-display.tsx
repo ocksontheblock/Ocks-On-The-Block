@@ -49,10 +49,15 @@ export default function UserDisplay() {
       </Button>
 
       {/* User Info */}
-      <div className="bg-black bg-opacity-70 text-white px-4 py-2 rounded-lg backdrop-blur-sm border border-white border-opacity-20 flex items-center space-x-2">
+      <Button
+        onClick={() => window.location.href = '/account'}
+        variant="ghost"
+        size="sm"
+        className="bg-black bg-opacity-70 text-white hover:bg-opacity-90 backdrop-blur-sm border border-white border-opacity-20 rounded-lg px-4 py-2 flex items-center space-x-2"
+      >
         <User className="h-4 w-4" />
         <span className="text-sm font-medium">{user?.username}</span>
-      </div>
+      </Button>
     </div>
   );
 }

@@ -1,0 +1,132 @@
+Please take your time and do one thing effectively and efficiently before moving on to the next task. Thank you.
+
+1. Email Alerts (First Drop)
+	•	Instead of a pop-up, I want customers to receive a welcome email when they register for alerts.
+	•	The email should:
+	•	Welcome them to Ocks on the Block.
+	•	Confirm they are registered for alerts.
+	•	Include an unsubscribe option at any time (to stay compliant and user-friendly).
+
+2. Customer Accounts (“View My Account” Page)
+	•	Add a “View My Account” page where users can:
+	•	See their recent purchases.
+	•	Manage account details (profile, email, password, etc.).
+	•	This page should look professional and trustworthy, like other established apps, but still feel original.
+	•	I want the vibe of: truthfulness, reliability, and honesty.
+
+3. Login Issue (Critical Fix)
+	•	Currently, when I log in, it shows I’m logged in but then immediately logs me out, forcing me to log in again.
+	•	Please fix this so that users can:
+	•	Stay logged in while browsing.
+	•	Shop and make purchases.
+	•	Participate in the scavenger hunt without being logged out.
+
+4. Scavenger Hunt Page Design
+	•	Make my logo bigger and more prominent.
+	•	The $10,000 prize should stand out even more than the logo.
+    * I want to also make the rules very straight forward something like this and if it can be better worded and placed and designed please do edit then. “Collect them all. Snap your Ocks. Prove it on the block. The first player to complete the full Ocky set — Ock and his Don version — wins $10,000 cash.”
+
+6. Scalability & Storage Concerns
+	•	I am worried about the website’s ability to handle tens or hundreds of thousands of user accounts.
+	•	Questions:
+	•	Will my website have issues storing login information at that scale?
+	•	Please provide a solution or recommendation for handling large-scale accounts and media storage.
+I also want this done. 
+	1.	Auth/session hardening: implement cookie flags + refresh flow; confirm logout bug is fixed.
+	2.	Email DNS (SPF/DKIM/DMARC) + welcome + unsubscribe flow live.
+	3.	/account page: profile, orders, security, data export/delete.
+	4.	Scavenger hunt verification service: geofence + EXIF + hashing + optional AI + manual queue.
+	5.	CDN + image pipeline: resizing, WebP, caching headers; lifecycle rules.
+	6.	Monitoring & backups: set up, document, and prove a restore.
+	7.	Policies & legal pages: publish Privacy/ToS; add consent terms for photo use.
+	8.	Accessibility pass: meet baseline WCAG; fix issues.
+	9.	SEO/OG pass: add meta, sitemap, OG assets; verify with a quick Lighthouse run.
+	10.	Cost guardrails: storage lifecycle + monthly cost dashboard (so uploads don’t surprise you).
+
+
+For the scavenger hunt I have decided that I do not want to do the pictures for verification on my website it will be held on my social media accounts. With that said I do not want any picture submissions on the website. Only a leaderboard. 
+
+I want to change the “Buy the Ock” layout
+
+Intro Text:
+
+“Step onto the corner with your shot at rare Ocks, legendary pulls, and a $10,000 cash prize. Every Mystery Box is a chance to score heat for your collection — and every pull brings you closer to the crown.”
+
+Four Box Layout (side-by-side on desktop, stacked on mobile):
+
+Worker Box – $29
+The Block Starter
+	•	70% Worker (Common)
+	•	20% Earner (Rare)
+	•	9% Boss (Elite)
+	•	1% Don (Legendary)
+💡 Affordable entry — get in the game and start stacking Ocks. Every Worker Box is a step toward the $10K.
+
+Earner Box – $49
+Best Hustle for Your Dollar
+	•	50% Worker
+	•	30% Earner
+	•	15% Boss
+	•	5% Don
+💡 Built for grinders leveling up. Better odds, bigger pulls — and every hit brings you closer to the bag.
+
+Boss Box – $89
+For the Streets, By the Kingpins
+	•	30% Worker
+	•	30% Earner
+	•	30% Boss
+	•	10% Don
+💡 Premium odds, powerful pulls. Collect like a kingpin and close in on that $10K.
+
+Don Box – $149
+Only the Chosen (Limited)
+	•	10% Earner
+	•	30% Boss
+	•	60% Don
+💡 No Workers here — just pure power. This is the Legendary Edition. Limited drop, heavy odds, and your best shot at the crown.
+
+
+I want you to highlight the earner box as a “best value” and the don box as limited and legendary, more emphasis on limited. 
+
+Disclaimer (at the bottom in smaller text):
+
+All Mystery Box contents are random. All sales are final. Participation in the Ocky Scavenger Hunt is open to all customers. First verified completion wins the $10,000 reward.
+
+
+
+
+
+1) Scavenger Hunt Pop-Up (replace content)
+
+Title: Ocky Scavenger Hunt — Rules & How to Enter
+Body (short + attractive):
+	•	Prize: First to complete the full Ocky set (each Ock + their Don version) wins $10,000.
+	•	How to enter (social only):
+	1.	Take a selfie with the real Ock AND their figurine
+	2.	Post on TikTok or Instagram
+	3.	Tag @ocksontheblock + use #OckyHunt10K
+	4.	Make your post Public
+	•	Verification: We verify entries from our official social accounts and repost select submissions.
+	•	Fair play: Earliest fully verified set wins. All decisions final.
+	•	Heads up: No uploads on the website. All submissions happen via social to keep it simple and free.
+
+Footer (tiny): All Mystery Box contents are random. All sales final. By entering, you allow Ocks on the Block to repost your content.
+
+
+What to tell Replit (plain instructions)
+
+1) Scavenger Hunt Pop-Up (replace content)
+
+Title: Ocky Scavenger Hunt — Rules & How to Enter
+Body (short + attractive):
+	•	Prize: First to complete the full Ocky set (each Ock + their Don version) wins $10,000.
+	•	How to enter (social only):
+	1.	Take a selfie with the real Ock AND their figurine
+	2.	Post on TikTok or Instagram
+	3.	Tag @ocksontheblock + use #OckyHunt10K
+	4.	Make your post Public
+	•	Verification: We verify entries from our official social accounts and repost select submissions.
+	•	Fair play: Earliest fully verified set wins. All decisions final.
+	•	Heads up: No uploads on the website. All submissions happen via social to keep it simple and free.
+
+Footer (tiny): All Mystery Box contents are random. All sales final. By entering, you allow Ocks on the Block to repost your content.

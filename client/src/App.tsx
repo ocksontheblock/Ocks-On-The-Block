@@ -17,9 +17,11 @@ import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
+import Account from "@/pages/account";
 import SubmitPhoto from "@/pages/submit-photo";
 import AdminDashboard from "@/pages/admin-dashboard";
 import Inventory from "@/pages/inventory";
+import Unsubscribe from "@/pages/unsubscribe";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 function Router() {
@@ -37,8 +39,10 @@ function Router() {
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
+      <Route path="/account" component={Account} />
       <Route path="/checkout" component={Checkout} />
       <Route path="/payment-success" component={PaymentSuccess} />
+      <Route path="/unsubscribe" component={Unsubscribe} />
       <Route component={NotFound} />
     </Switch>
   );
