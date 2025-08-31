@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     console.log("User logged out:", user?.username);
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("authToken");
   };
 
   // Load user from localStorage on startup
@@ -42,20 +43,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = () => {
       try {
         const storedUser = localStorage.getItem("user");
-        if (storedUser) {
+        if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
           const user: User = JSON.parse(storedUser);
-          // Validate that the user object has required fields
-          if (user && user.id && user.username && user.email) {
+          // Validate that the user object has required fields and is properly structured
+          if (user && typeof user === 'object' && user.id && user.username && user.email) {
             setUser(user);
             console.log("User restored from localStorage:", user.username);
           } else {
-            console.log("Invalid user data in localStorage, clearing...");
+            console.log("Invalid user data structure in localStorage, clearing...");
             localStorage.removeItem("user");
           }
+        } else if (storedUser) {
+          // Clear invalid localStorage entries like "undefined" or "null" strings
+          console.log("Clearing malformed localStorage user data");
+          localStorage.removeItem("user");
         }
       } catch (error) {
         console.error("Error parsing stored user:", error);
-        localStorage.removeItem("user");
+        // Clear all auth-related localStorage data on error to prevent future issues
+        try {
+          localStorage.removeItem("user");
+          localStorage.removeItem("authToken");
+          console.log("Cleared corrupted auth data from localStorage");
+        } catch (clearError) {
+          console.error("Failed to clear localStorage:", clearError);
+        }
       } finally {
         setIsLoading(false);
         setAuthChecked(true);
