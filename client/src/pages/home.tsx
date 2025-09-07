@@ -25,8 +25,9 @@ export default function Home() {
       <HamburgerMenu />
       <UserDisplay />
       
-      {/* Hero Section with Logo */}
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50 px-4 relative overflow-hidden">
+      <main>
+        {/* Hero Section with Logo */}
+        <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50 px-4 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-32 h-32 bg-ock-orange/5 rounded-full blur-3xl"></div>
@@ -84,8 +85,9 @@ export default function Home() {
         </div>
       </section>
 
-      <AmpedOckShowcase />
-      <MisterHeartiSection />
+        <AmpedOckShowcase />
+        <MisterHeartiSection />
+      </main>
       <Footer />
       
       <EmailSignupModal 
