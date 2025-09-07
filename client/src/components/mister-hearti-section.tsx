@@ -5,7 +5,7 @@ const featuredOcks = [
     id: 1,
     name: "Mister Hearti",
     bio: "While the block moves loud, Mister Hearti moves steady — always there, always real. He don't just run the store — he holds the corner with heart.",
-    image: "/hearti-new.png",
+    image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600",
     objectPosition: "center top"
   },
   {
@@ -194,10 +194,8 @@ export default function MisterHeartiSection() {
                   onDragStart={(e) => e.preventDefault()}
                   onError={(e) => {
                     console.log('Image failed to load:', currentOck.image);
-                    // Use the new Hearti image
-                    if (currentOck.name === "Mister Hearti") {
-                      e.currentTarget.src = "/hearti-new.png";
-                    }
+                    // Use a fallback placeholder
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=600";
                   }}
                 />
               </div>
