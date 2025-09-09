@@ -11,14 +11,7 @@ import logoPath from "@assets/05510F49-8788-4872-9022-591FAA016F73_1756020759938
 export default function Home() {
   const [showSignupModal, setShowSignupModal] = useState(false);
 
-  // Show signup modal after 5 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSignupModal(true);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // Auto-popup removed - modal will only show when manually triggered
 
   return (
     <div className="min-h-screen bg-white">
