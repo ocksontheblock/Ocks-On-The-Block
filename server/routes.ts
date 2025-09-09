@@ -33,6 +33,7 @@ import {
 } from "@shared/schema";
 import { eq, and, desc, count, ne } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { brevoService } from "./brevoService";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -456,10 +457,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(409).json({ error: "Already joined the hunt" });
       }
 
+      // Get user details for Brevo
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, userId));
+
       const [participant] = await db
         .insert(scavengerHuntParticipants)
         .values({ userId })
         .returning();
+
+      // Send Brevo welcome email
+      if (user?.email) {
+        try {
+          await brevoService.addScavengerHuntContact(
+            user.email, 
+            user.firstName || undefined, 
+            user.lastName || undefined
+          );
+          await brevoService.sendScavengerHuntWelcomeEmail(
+            user.email, 
+            user.firstName || undefined
+          );
+          console.log(`Brevo welcome email sent to ${user.email}`);
+        } catch (brevoError) {
+          console.error('Brevo service error:', brevoError);
+          // Don't fail the registration if email fails
+        }
+      }
       
       res.json({ participant });
     } catch (error) {
