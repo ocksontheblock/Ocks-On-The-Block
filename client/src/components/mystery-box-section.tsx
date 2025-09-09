@@ -1,70 +1,106 @@
-const mysteryBoxes = [
-  {
-    id: 1,
-    name: "Worker Box",
-    subtitle: "The Block Starter",
-    description: "Affordable entry — get in the game and start stacking Ocks. Every Worker Box is a step toward the $10K.",
-    price: 29,
-    odds: [
-      { rarity: "Worker (Common)", percentage: "70%" },
-      { rarity: "Earner (Rare)", percentage: "20%" },
-      { rarity: "Boss (Elite)", percentage: "9%" },
-      { rarity: "Don (Legendary)", percentage: "1%" }
-    ],
-    image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
-    gradient: "from-gray-600 to-gray-800",
-    highlight: null
-  },
-  {
-    id: 2,
-    name: "Earner Box",
-    subtitle: "Best Hustle for Your Dollar",
-    description: "Built for grinders leveling up. Better odds, bigger pulls — and every hit brings you closer to the bag.",
-    price: 49,
-    odds: [
-      { rarity: "Worker", percentage: "50%" },
-      { rarity: "Earner", percentage: "30%" },
-      { rarity: "Boss", percentage: "15%" },
-      { rarity: "Don", percentage: "5%" }
-    ],
-    image: "https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
-    gradient: "from-orange-500 to-red-600",
-    highlight: "best-value"
-  },
-  {
-    id: 3,
-    name: "Boss Box",
-    subtitle: "For the Streets, By the Kingpins",
-    description: "Premium odds, powerful pulls. Collect like a kingpin and close in on that $10K.",
-    price: 89,
-    odds: [
-      { rarity: "Worker", percentage: "30%" },
-      { rarity: "Earner", percentage: "30%" },
-      { rarity: "Boss", percentage: "30%" },
-      { rarity: "Don", percentage: "10%" }
-    ],
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
-    gradient: "from-blue-500 to-purple-600",
-    highlight: null
-  },
-  {
-    id: 4,
-    name: "Don Box",
-    subtitle: "Only the Chosen (Limited)",
-    description: "No Workers here — just pure power. This is the Legendary Edition. Limited drop, heavy odds, and your best shot at the crown.",
-    price: 149,
-    odds: [
-      { rarity: "Earner", percentage: "10%" },
-      { rarity: "Boss", percentage: "30%" },
-      { rarity: "Don", percentage: "60%" }
-    ],
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
-    gradient: "from-yellow-400 to-orange-500",
-    highlight: "limited"
-  }
-];
+import { useQuery } from "@tanstack/react-query";
+
+interface MysteryBox {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  tier: number;
+  image: string;
+  inStock: boolean;
+}
 
 export default function MysteryBoxSection() {
+  const { data: mysteryBoxes, isLoading } = useQuery<{ mysteryBoxes: MysteryBox[] }>({
+    queryKey: ["/api/mystery-boxes"],
+  });
+
+  const getBoxMapping = (box: MysteryBox) => {
+    const baseBox = {
+      id: box.id,
+      name: box.name,
+      description: box.description,
+      price: parseFloat(box.price),
+      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&h=500",
+      subtitle: "The Block",
+      odds: [{ rarity: "Common", percentage: "100%" }],
+      gradient: "from-gray-600 to-gray-800",
+      highlight: null as string | null
+    };
+
+    switch (box.tier) {
+      case 1:
+        return {
+          ...baseBox,
+          subtitle: "The Block Starter",
+          odds: [
+            { rarity: "Worker (Common)", percentage: "95%" },
+            { rarity: "Earner (Rare)", percentage: "5%" }
+          ],
+          gradient: "from-gray-600 to-gray-800",
+          highlight: null
+        };
+      case 2:
+        return {
+          ...baseBox,
+          subtitle: "Best Hustle for Your Dollar",
+          odds: [
+            { rarity: "Worker", percentage: "85%" },
+            { rarity: "Earner", percentage: "13%" },
+            { rarity: "Boss", percentage: "2%" }
+          ],
+          gradient: "from-orange-500 to-red-600",
+          highlight: "best-value"
+        };
+      case 3:
+        return {
+          ...baseBox,
+          subtitle: "For the Streets, By the Kingpins",
+          odds: [
+            { rarity: "Worker", percentage: "75%" },
+            { rarity: "Earner", percentage: "17%" },
+            { rarity: "Boss", percentage: "7%" },
+            { rarity: "Don", percentage: "1%" }
+          ],
+          gradient: "from-blue-500 to-purple-600",
+          highlight: null
+        };
+      case 4:
+        return {
+          ...baseBox,
+          subtitle: "Only the Chosen (Limited)",
+          odds: [
+            { rarity: "Earner", percentage: "65%" },
+            { rarity: "Boss", percentage: "32%" },
+            { rarity: "Don", percentage: "3%" }
+          ],
+          gradient: "from-yellow-400 to-orange-500",
+          highlight: "limited"
+        };
+      default:
+        return baseBox;
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <section className="bg-gray-50 py-16 px-4 md:px-8" id="buy-ocks">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+            <p className="mt-4 text-gray-600">Loading mystery boxes...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!mysteryBoxes?.mysteryBoxes) {
+    return null;
+  }
+
+  const mappedBoxes = mysteryBoxes.mysteryBoxes.map(getBoxMapping);
+
   return (
     <section className="bg-gray-50 py-16 px-4 md:px-8" id="buy-ocks">
       <div className="max-w-6xl mx-auto">
@@ -79,7 +115,7 @@ export default function MysteryBoxSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {mysteryBoxes.map((box) => (
+          {mappedBoxes.map((box) => (
             <div 
               key={box.id}
               className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 relative ${
@@ -120,7 +156,7 @@ export default function MysteryBoxSection() {
                 {/* Odds breakdown */}
                 <div className="mb-4">
                   <ul className="text-xs text-gray-600 space-y-1">
-                    {box.odds.map((odd, index) => (
+                    {box.odds.map((odd: any, index: number) => (
                       <li key={index} className="flex justify-between">
                         <span>• {odd.percentage} {odd.rarity}</span>
                       </li>
