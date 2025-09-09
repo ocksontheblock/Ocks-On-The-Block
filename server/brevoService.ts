@@ -79,89 +79,93 @@ class BrevoService {
             name: firstName || "Hunter"
           }
         ],
-        subject: "🏆 Welcome to the $10K Scavenger Hunt!",
+        subject: "🏆 You're In! Welcome to the Hunt",
         htmlContent: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8f9fa; padding: 20px;">
-            <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-              <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #ff5722; font-size: 28px; margin: 0;">🏆 Welcome to the Hunt!</h1>
-                <p style="color: #666; font-size: 18px; margin: 10px 0;">You're officially in the running for $10,000!</p>
-              </div>
-              
-              <div style="background: linear-gradient(45deg, #ff5722, #ff7043); color: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; text-align: center;">
-                <h2 style="margin: 0; font-size: 24px;">NYC Scavenger Hunt</h2>
-                <p style="margin: 10px 0 0 0; font-size: 16px;">Find all 5 borough Ocks to win the grand prize!</p>
-              </div>
-              
-              <div style="margin-bottom: 25px;">
-                <h3 style="color: #333; margin-bottom: 15px;">🎯 How to Win:</h3>
-                <ol style="color: #666; line-height: 1.6;">
-                  <li><strong>Buy Mystery Boxes</strong> - Get your Ock figurines</li>
-                  <li><strong>Find the Locations</strong> - Visit verified corner stores in all 5 boroughs</li>
-                  <li><strong>Take Photos</strong> - Snap pics with your figurines at each location</li>
-                  <li><strong>Submit for Verification</strong> - Upload through our website</li>
-                  <li><strong>Win $10,000!</strong> - First verified completion takes it all</li>
-                </ol>
-              </div>
-              
-              <div style="background-color: #f0f8ff; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-                <h3 style="color: #333; margin-top: 0;">🗽 Borough Locations:</h3>
-                <ul style="color: #666; margin: 0; padding-left: 20px;">
-                  <li>Manhattan - Broadway & 125th St</li>
-                  <li>Brooklyn - Atlantic Ave & Flatbush</li>
-                  <li>Queens - Queens Blvd & Roosevelt</li>
-                  <li>Bronx - Grand Concourse & 149th</li>
-                  <li>Staten Island - Victory Blvd & Forest Ave</li>
-                </ul>
-              </div>
-              
-              <div style="text-align: center; margin-bottom: 25px;">
-                <a href="https://ocksontheblock.com/buy-ocks" style="background-color: #ff5722; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-                  🛒 Buy Mystery Boxes
-                </a>
-              </div>
-              
-              <div style="border-top: 1px solid #eee; padding-top: 20px; color: #666; font-size: 14px;">
-                <p><strong>Tips for Success:</strong></p>
-                <ul>
-                  <li>Higher tier boxes = better figurines = more points</li>
-                  <li>Legendary figurines give maximum points</li>
-                  <li>Take clear photos with GPS enabled</li>
-                  <li>Follow @ocksontheblock for location hints</li>
-                </ul>
-              </div>
-              
-              <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                <p style="color: #999; font-size: 12px; margin: 0;">
-                  You're receiving this because you joined the Ocks on the Block Scavenger Hunt.
-                  <br>Good luck, and may the best hunter win! 🏆
-                </p>
+          <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #000; padding: 0;">
+            <div style="background: linear-gradient(135deg, #ff5722 0%, #000 100%); padding: 2px;">
+              <div style="background-color: #fff; margin: 0;">
+                
+                <!-- Header -->
+                <div style="background-color: #000; color: #fff; padding: 30px 20px; text-align: center;">
+                  <h1 style="color: #ff5722; font-size: 32px; margin: 0 0 10px 0; font-weight: 900; letter-spacing: -1px;">
+                    Welcome to New York City's Biggest Scavenger Hunt
+                  </h1>
+                  <p style="color: #fff; font-size: 18px; margin: 0; font-weight: 300;">
+                    Hosted by Ocks on the Block 🗽
+                  </p>
+                </div>
+                
+                <!-- Body -->
+                <div style="padding: 30px 20px; background-color: #fff;">
+                  <div style="margin-bottom: 30px;">
+                    <p style="color: #333; font-size: 18px; line-height: 1.5; margin: 0 0 20px 0; font-weight: 500;">
+                      You just joined the hunt that's about to take over all 5 boroughs.
+                    </p>
+                    
+                    <p style="color: #333; font-size: 16px; margin: 0 0 15px 0; font-weight: 600;">
+                      Here's what's ahead:
+                    </p>
+                    
+                    <ul style="color: #333; font-size: 16px; line-height: 1.8; margin: 0; padding-left: 20px; list-style: none;">
+                      <li style="margin-bottom: 8px;">🎁 <strong>Mystery Boxes dropping soon</strong> — unlock your Ock figurines</li>
+                      <li style="margin-bottom: 8px;">📍 <strong>Verified corner store locations</strong> across NYC</li>
+                      <li style="margin-bottom: 8px;">🏆 <strong>A $10,000 prize</strong> for the first player to complete the hunt</li>
+                    </ul>
+                  </div>
+                  
+                  <div style="background-color: #ff5722; color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 30px; text-align: center;">
+                    <p style="margin: 0; font-size: 16px; font-weight: 500;">
+                      Stay locked in — we'll be sending you updates, hints, and instructions straight to your inbox.
+                    </p>
+                  </div>
+                  
+                  <!-- CTA Button -->
+                  <div style="text-align: center; margin-bottom: 30px;">
+                    <a href="https://ocksontheblock.com/buy-ocks" style="background-color: #ff5722; color: #fff; padding: 18px 40px; text-decoration: none; border-radius: 50px; font-weight: 700; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3); text-transform: uppercase; letter-spacing: 1px;">
+                      👉 Start the Hunt
+                    </a>
+                  </div>
+                </div>
+                
+                <!-- Footer -->
+                <div style="background-color: #f8f9fa; padding: 25px 20px; text-align: center; border-top: 3px solid #ff5722;">
+                  <p style="color: #333; font-size: 16px; margin: 0 0 10px 0; font-weight: 600;">
+                    Follow us for live hints, drops, and behind-the-scenes action:
+                  </p>
+                  <p style="color: #ff5722; font-size: 18px; margin: 0; font-weight: 700;">
+                    @ocksontheblock on TikTok & Instagram
+                  </p>
+                  
+                  <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <p style="color: #666; font-size: 12px; margin: 0;">
+                      You're in the hunt because you signed up. Time to make NYC history. 🏆
+                    </p>
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>
         `,
         textContent: `
-Welcome to the $10K Scavenger Hunt!
+🏆 You're In! Welcome to the Hunt
 
-You're officially in the running for $10,000!
+Welcome to New York City's Biggest Scavenger Hunt — Hosted by Ocks on the Block 🗽
 
-How to Win:
-1. Buy Mystery Boxes - Get your Ock figurines
-2. Find the Locations - Visit verified corner stores in all 5 boroughs  
-3. Take Photos - Snap pics with your figurines at each location
-4. Submit for Verification - Upload through our website
-5. Win $10,000! - First verified completion takes it all
+You just joined the hunt that's about to take over all 5 boroughs.
 
-Borough Locations:
-• Manhattan - Broadway & 125th St
-• Brooklyn - Atlantic Ave & Flatbush  
-• Queens - Queens Blvd & Roosevelt
-• Bronx - Grand Concourse & 149th
-• Staten Island - Victory Blvd & Forest Ave
+Here's what's ahead:
+• 🎁 Mystery Boxes dropping soon — unlock your Ock figurines
+• 📍 Verified corner store locations across NYC  
+• 🏆 A $10,000 prize for the first player to complete the hunt
 
-Buy Mystery Boxes: https://ocksontheblock.com/buy-ocks
+Stay locked in — we'll be sending you updates, hints, and instructions straight to your inbox.
 
-Good luck, and may the best hunter win!
+👉 Start the Hunt: https://ocksontheblock.com/buy-ocks
+
+Follow us on TikTok and Instagram @ocksontheblock for live hints, drops, and behind-the-scenes action.
+
+You're in the hunt because you signed up. Time to make NYC history. 🏆
         `
       };
 
