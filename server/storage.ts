@@ -1,4 +1,13 @@
-import { users, type User, type InsertUser } from "@shared/schema";
+import { 
+  users, 
+  mysteryBoxes,
+  userMysteryBoxes,
+  userFigurines,
+  type User, 
+  type InsertUser,
+  type MysteryBox,
+  type InsertMysteryBox
+} from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -10,6 +19,9 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  getMysteryBoxes(): Promise<MysteryBox[]>;
+  getUserFigurines(userId: number): Promise<any[]>;
+  getUserPurchases(userId: number): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -34,6 +46,35 @@ export class DatabaseStorage implements IStorage {
       .values(insertUser)
       .returning();
     return user;
+  }
+
+  async getMysteryBoxes(): Promise<MysteryBox[]> {
+    return await db.select().from(mysteryBoxes);
+  }
+
+  async getUserFigurines(userId: number): Promise<any[]> {
+    return await db
+      .select()
+      .from(userFigurines)
+      .where(eq(userFigurines.userId, userId));
+  }
+
+  async getUserPurchases(userId: number): Promise<any[]> {
+    return await db
+      .select({
+        id: userMysteryBoxes.id,
+        purchaseDate: userMysteryBoxes.purchaseDate,
+        isOpened: userMysteryBoxes.isOpened,
+        mysteryBox: {
+          name: mysteryBoxes.name,
+          description: mysteryBoxes.description,
+          price: mysteryBoxes.price,
+          tier: mysteryBoxes.tier,
+        },
+      })
+      .from(userMysteryBoxes)
+      .leftJoin(mysteryBoxes, eq(userMysteryBoxes.mysteryBoxId, mysteryBoxes.id))
+      .where(eq(userMysteryBoxes.userId, userId));
   }
 }
 

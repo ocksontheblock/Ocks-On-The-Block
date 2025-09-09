@@ -434,68 +434,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Authentication routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const userData = insertUserSchema.parse(req.body);
-      
-      // Check if email already exists
-      const [existingEmail] = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, userData.email));
-      
-      if (existingEmail) {
-        return res.status(409).json({ error: "Email already exists" });
-      }
-
-      // Check if username already exists
-      const [existingUsername] = await db
-        .select()
-        .from(users)
-        .where(eq(users.username, userData.username!));
-      
-      if (existingUsername) {
-        return res.status(409).json({ error: "Username already exists" });
-      }
-      
-      // Hash password
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
-      
-      const [user] = await db
-        .insert(users)
-        .values({ ...userData, password: hashedPassword })
-        .returning();
-      
-      res.json({ user: { ...user, password: undefined } });
-    } catch (error) {
-      console.error('Registration error:', error);
-      res.status(400).json({ error: "Invalid registration data" });
-    }
-  });
-
-  app.post("/api/auth/login", authRateLimit, async (req, res) => {
-    try {
-      const loginData = loginUserSchema.parse(req.body);
-      
-      const [user] = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, loginData.email));
-      
-      if (!user || !await bcrypt.compare(loginData.password, user.password)) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-      
-      // Cache the authenticated user
-      cacheUser(user.id, user);
-      
-      res.json({ user: { ...user, password: undefined } });
-    } catch (error) {
-      console.error('Login error:', error);
-      res.status(400).json({ error: "Invalid login data" });
-    }
-  });
 
   // Scavenger Hunt Routes
   
@@ -690,6 +628,183 @@ export async function registerRoutes(app: Express): Promise<Server> {
         error: "Error creating payment intent",
         message: error.message 
       });
+    }
+  });
+
+  // Stripe webhook for payment completion
+  app.post("/api/webhooks/stripe", async (req, res) => {
+    const sig = req.headers['stripe-signature'] as string;
+    let event: Stripe.Event;
+
+    try {
+      // In production, you should set STRIPE_WEBHOOK_SECRET
+      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || "");
+    } catch (err: any) {
+      console.log(`Webhook signature verification failed.`, err.message);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    // Handle the payment intent success event
+    if (event.type === 'payment_intent.succeeded') {
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      
+      try {
+        await fulfillMysteryBoxOrder(paymentIntent);
+        console.log('Order fulfilled for payment:', paymentIntent.id);
+      } catch (error) {
+        console.error('Order fulfillment failed:', error);
+      }
+    }
+
+    res.json({ received: true });
+  });
+
+  // Order fulfillment function
+  async function fulfillMysteryBoxOrder(paymentIntent: Stripe.PaymentIntent) {
+    const { userId, mysteryBoxId, quantity } = paymentIntent.metadata;
+    
+    if (!userId || !mysteryBoxId || !quantity) {
+      throw new Error('Missing order metadata');
+    }
+
+    // Create the purchase record
+    const [purchase] = await db
+      .insert(userMysteryBoxes)
+      .values({
+        userId: parseInt(userId),
+        mysteryBoxId: parseInt(mysteryBoxId),
+        stripePaymentId: paymentIntent.id,
+        isOpened: false,
+        figuresReceived: []
+      })
+      .returning();
+
+    // Generate random figurines based on mystery box tier
+    const [mysteryBox] = await db
+      .select()
+      .from(mysteryBoxes)
+      .where(eq(mysteryBoxes.id, parseInt(mysteryBoxId)));
+
+    if (mysteryBox) {
+      const figurinesToGenerate = parseInt(quantity);
+      for (let i = 0; i < figurinesToGenerate; i++) {
+        await generateRandomFigurine(parseInt(userId), purchase.id, mysteryBox.tier);
+      }
+    }
+  }
+
+  // Generate random figurine based on tier
+  async function generateRandomFigurine(userId: number, purchaseId: number, tier: number) {
+    const boroughs = ['Manhattan', 'Brooklyn', 'Queens', 'Bronx', 'Staten Island'];
+    const ockNames = ['Big Tony', 'Mama Rosa', 'Cool Dre', 'Señor Miguel', 'Uncle Sam'];
+    
+    // Determine rarity based on tier and random chance
+    let rarity = 'common';
+    const rarityRoll = Math.random();
+    
+    switch (tier) {
+      case 1: // $29 tier
+        if (rarityRoll < 0.05) rarity = 'rare';
+        break;
+      case 2: // $49 tier  
+        if (rarityRoll < 0.15) rarity = 'rare';
+        else if (rarityRoll < 0.02) rarity = 'elite';
+        break;
+      case 3: // $89 tier
+        if (rarityRoll < 0.25) rarity = 'rare';
+        else if (rarityRoll < 0.08) rarity = 'elite';
+        else if (rarityRoll < 0.01) rarity = 'legendary';
+        break;
+      case 4: // $149 tier
+        if (rarityRoll < 0.35) rarity = 'rare';
+        else if (rarityRoll < 0.15) rarity = 'elite';
+        else if (rarityRoll < 0.03) rarity = 'legendary';
+        break;
+    }
+
+    const borough = boroughs[Math.floor(Math.random() * boroughs.length)];
+    const ockName = ockNames[Math.floor(Math.random() * ockNames.length)];
+    const figurineId = `${ockName.toLowerCase().replace(' ', '_')}_${borough.toLowerCase()}_${rarity}`;
+    
+    await db.insert(userFigurines).values({
+      userId,
+      figurineId,
+      figurineName: `${ockName} of ${borough}`,
+      rarity,
+      borough,
+      ockName,
+      mysteryBoxPurchaseId: purchaseId,
+      isUsedInHunt: false,
+    });
+  }
+
+  // Admin routes for managing the hunt
+  app.get("/api/admin/submissions/pending", async (req, res) => {
+    try {
+      // TODO: Add admin authentication check
+      const pendingSubmissions = await db
+        .select({
+          id: scavengerHuntSubmissions.id,
+          participantName: users.username,
+          ockName: ocks.name,
+          photoUrl: scavengerHuntSubmissions.photoUrl,
+          figurineRarity: scavengerHuntSubmissions.figurineRarity,
+          submittedAt: scavengerHuntSubmissions.submittedAt,
+          gpsCoordinates: scavengerHuntSubmissions.gpsCoordinates,
+        })
+        .from(scavengerHuntSubmissions)
+        .leftJoin(scavengerHuntParticipants, eq(scavengerHuntSubmissions.participantId, scavengerHuntParticipants.id))
+        .leftJoin(users, eq(scavengerHuntParticipants.userId, users.id))
+        .leftJoin(ocks, eq(scavengerHuntSubmissions.ockId, ocks.id))
+        .where(eq(scavengerHuntSubmissions.verificationStatus, 'pending'))
+        .orderBy(desc(scavengerHuntSubmissions.submittedAt));
+      
+      res.json(pendingSubmissions);
+    } catch (error) {
+      console.error('Admin submissions error:', error);
+      res.status(500).json({ error: "Failed to fetch pending submissions" });
+    }
+  });
+
+  app.post("/api/admin/submissions/:id/verify", async (req, res) => {
+    try {
+      // TODO: Add admin authentication check
+      const submissionId = parseInt(req.params.id);
+      const { status, adminNotes, reviewedBy } = req.body; // approved or rejected
+      
+      const [submission] = await db
+        .update(scavengerHuntSubmissions)
+        .set({
+          verificationStatus: status,
+          adminNotes,
+          reviewedBy,
+          verifiedAt: new Date(),
+        })
+        .where(eq(scavengerHuntSubmissions.id, submissionId))
+        .returning();
+
+      // If approved, update participant's totals
+      if (status === 'approved') {
+        const [participant] = await db
+          .select()
+          .from(scavengerHuntParticipants)
+          .where(eq(scavengerHuntParticipants.id, submission.participantId));
+
+        if (participant) {
+          await db
+            .update(scavengerHuntParticipants)
+            .set({
+              totalOcksFound: (participant.totalOcksFound || 0) + 1,
+              totalPoints: (participant.totalPoints || 0) + (submission.points || 0),
+            })
+            .where(eq(scavengerHuntParticipants.id, participant.id));
+        }
+      }
+      
+      res.json({ submission });
+    } catch (error) {
+      console.error('Admin verify error:', error);
+      res.status(500).json({ error: "Failed to verify submission" });
     }
   });
 
