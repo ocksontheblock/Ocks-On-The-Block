@@ -49,7 +49,7 @@ export default function CartModal({ isOpen, onClose, userId }: CartModalProps) {
     },
   });
 
-  const cartItems = cartData?.cartItems || [];
+  const cartItems = (cartData as any)?.cartItems || [];
   const total = cartItems.reduce((sum: number, item: any) => 
     sum + (item.mysteryBox?.price || 0) * item.quantity, 0
   );
