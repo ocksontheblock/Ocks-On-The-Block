@@ -2,6 +2,7 @@
 // Helps reduce database load and improve performance at scale
 
 import { Request, Response, NextFunction } from "express";
+import crypto from "crypto";
 
 // Extend Express Request type to include session
 declare module 'express-serve-static-core' {
@@ -45,8 +46,15 @@ export function optimizeSession(req: Request, res: Response, next: NextFunction)
   if (req.path.startsWith('/api/static/') || req.path.startsWith('/public-objects/')) {
     res.set({
       'Cache-Control': 'public, max-age=3600, s-maxage=7200', // 1 hour browser, 2 hours CDN
-      'ETag': `"${Date.now()}"`, // Simple ETag for cache validation
     });
+    
+    // Override res.send to generate ETag based on response body
+    const originalSend = res.send;
+    res.send = function(body: any) {
+      const etag = crypto.createHash("sha1").update(body).digest("hex");
+      res.setHeader("ETag", etag);
+      return originalSend.call(this, body);
+    };
   }
   
   next();
@@ -124,7 +132,8 @@ export function monitorDatabasePerformance() {
 
 // Cleanup expired users from cache to prevent memory leaks
 function cleanupUserCache() {
-  for (const [userId, cached] of userCache.entries()) {
+  const entries = Array.from(userCache.entries());
+  for (const [userId, cached] of entries) {
     if (cached.expires < Date.now()) {
       userCache.delete(userId);
     }
