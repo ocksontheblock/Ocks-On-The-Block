@@ -71,7 +71,7 @@ class BrevoService {
       const emailData = {
         sender: {
           name: "Ocks on the Block",
-          email: "noreply@ocksontheblock.com" // Replace with your verified sender email
+          email: "info@ocksontheblock.com"
         },
         to: [
           {

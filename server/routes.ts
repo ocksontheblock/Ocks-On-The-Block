@@ -16,6 +16,8 @@ import {
   scavengerHuntPrizes,
   ocks,
   locations,
+  userMysteryBoxes,
+  userFigurines,
   type InsertUser, 
   type InsertMysteryBox,
   type InsertCartItem,
@@ -257,8 +259,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           lastName: user.lastName,
           createdAt: user.createdAt,
         },
-        purchases: [], // TODO: Add actual purchase data
-        cartItems: [], // TODO: Add cart items if any
+        purchases: await db
+          .select()
+          .from(userMysteryBoxes)
+          .where(eq(userMysteryBoxes.userId, userId)),
+        cartItems: await db
+          .select()
+          .from(cartItems)
+          .where(eq(cartItems.userId, userId)),
         exportDate: new Date().toISOString(),
       };
       
