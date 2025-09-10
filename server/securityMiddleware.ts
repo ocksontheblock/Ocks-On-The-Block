@@ -124,7 +124,15 @@ export function validateSession(req: Request, res: Response, next: NextFunction)
     }, req);
     
     req.session.destroy((err: any) => {
-      if (err) console.error('Session destroy error:', err);
+      if (err) {
+        console.error({
+          level: "error",
+          message: "Session destroy error",
+          error: err instanceof Error ? err.message : String(err),
+          stack: err instanceof Error ? err.stack : undefined,
+          timestamp: new Date().toISOString()
+        });
+      }
     });
     
     return res.status(401).json({ error: "Session invalid" });

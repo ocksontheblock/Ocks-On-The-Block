@@ -6,6 +6,17 @@ import { authRateLimit, signupRateLimit, emailSignupRateLimit, apiRateLimit } fr
 import { optimizeSession, cacheUser, getCachedUser, clearUserCache, monitorDatabasePerformance } from "./sessionOptimizations";
 import { addSecurityHeaders, sanitizeUserInput, validatePasswordStrength, detectSuspiciousActivity, validateSession } from "./securityMiddleware";
 import Stripe from "stripe";
+
+// Utility function for safe error logging
+function logError(message: string, error: unknown) {
+  console.error({
+    level: "error",
+    message,
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+    timestamp: new Date().toISOString()
+  });
+}
 import { 
   users, 
   mysteryBoxes, 
@@ -78,7 +89,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         await sendWelcomeEmail(signup.email, signup.id);
       } catch (emailError) {
-        console.error('Failed to send welcome email:', emailError);
+        logError("Failed to send welcome email during registration", emailError);
         // Don't fail the signup if email fails
       }
       
@@ -128,7 +139,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ email: signup.email, message: "Successfully unsubscribed" });
     } catch (error) {
-      console.error('Unsubscribe error:', error);
+      logError("Failed to unsubscribe user from email list", error);
       res.status(500).json({ error: "Failed to unsubscribe" });
     }
   });
@@ -154,7 +165,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(purchases);
     } catch (error) {
-      console.error('Error fetching purchases:', error);
+      logError("Failed to fetch user purchases", error);
       res.status(500).json({ error: "Failed to fetch purchases" });
     }
   });
@@ -194,7 +205,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ user: { ...updatedUser, password: undefined } });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      logError("Failed to update user profile", error);
       res.status(500).json({ error: "Failed to update profile" });
     }
   });
@@ -231,7 +242,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ message: "Password updated successfully" });
     } catch (error) {
-      console.error('Error updating password:', error);
+      logError("Failed to update user password", error);
       res.status(500).json({ error: "Failed to update password" });
     }
   });
@@ -272,7 +283,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(userData);
     } catch (error) {
-      console.error('Error exporting data:', error);
+      logError("Failed to export user data", error);
       res.status(500).json({ error: "Failed to export data" });
     }
   });
@@ -281,12 +292,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.body.userId; // This should come from authentication middleware
       
-      // Delete user account (this will cascade to related data)
+      // Delete related data before deleting user
+      await db.delete(cartItems).where(eq(cartItems.userId, userId));
+      await db.delete(userMysteryBoxes).where(eq(userMysteryBoxes.userId, userId));
+      await db.delete(scavengerHuntParticipants).where(eq(scavengerHuntParticipants.userId, userId));
+      
+      // Delete user account
       await db.delete(users).where(eq(users.id, userId));
       
       res.json({ message: "Account deleted successfully" });
     } catch (error) {
-      console.error('Error deleting account:', error);
+      logError("Failed to delete user account", error);
       res.status(500).json({ error: "Failed to delete account" });
     }
   });
@@ -506,14 +522,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           );
           console.log(`Brevo welcome email sent to ${user.email}`);
         } catch (brevoError) {
-          console.error('Brevo service error:', brevoError);
+          logError("Brevo email service failed during scavenger hunt join", brevoError);
           // Don't fail the registration if email fails
         }
       }
       
       res.json({ participant });
     } catch (error) {
-      console.error('Scavenger hunt join error:', error);
+      logError("Failed to join scavenger hunt", error);
       res.status(500).json({ error: "Failed to join scavenger hunt" });
     }
   });
@@ -536,7 +552,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(leaderboard);
     } catch (error) {
-      console.error('Leaderboard error:', error);
+      logError("Failed to fetch scavenger hunt leaderboard", error);
       res.status(500).json({ error: "Failed to fetch leaderboard" });
     }
   });
@@ -552,7 +568,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(prizes);
     } catch (error) {
-      console.error('Prizes error:', error);
+      logError("Failed to fetch scavenger hunt prizes", error);
       res.status(500).json({ error: "Failed to fetch prizes" });
     }
   });
@@ -569,7 +585,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ prize });
     } catch (error) {
-      console.error('Prize creation error:', error);
+      logError("Failed to create scavenger hunt prize", error);
       res.status(400).json({ error: "Invalid prize data" });
     }
   });
@@ -607,7 +623,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ submission });
     } catch (error) {
-      console.error('Submission error:', error);
+      logError("Failed to submit scavenger hunt answer", error);
       res.status(400).json({ error: "Invalid submission data" });
     }
   });
@@ -642,7 +658,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ participant, submissions });
     } catch (error) {
-      console.error('Progress error:', error);
+      logError("Failed to fetch user progress", error);
       res.status(500).json({ error: "Failed to fetch progress" });
     }
   });
@@ -673,7 +689,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         paymentIntentId: paymentIntent.id
       });
     } catch (error: any) {
-      console.error('Stripe payment error:', error);
+      logError("Stripe payment processing failed", error);
       res.status(500).json({ 
         error: "Error creating payment intent",
         message: error.message 
@@ -702,7 +718,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await fulfillMysteryBoxOrder(paymentIntent);
         console.log('Order fulfilled for payment:', paymentIntent.id);
       } catch (error) {
-        console.error('Order fulfillment failed:', error);
+        logError("Order fulfillment failed after payment success", error);
       }
     }
 
@@ -811,7 +827,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(pendingSubmissions);
     } catch (error) {
-      console.error('Admin submissions error:', error);
+      logError("Failed to fetch admin submissions", error);
       res.status(500).json({ error: "Failed to fetch pending submissions" });
     }
   });
@@ -853,7 +869,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({ submission });
     } catch (error) {
-      console.error('Admin verify error:', error);
+      logError("Failed to verify admin submission", error);
       res.status(500).json({ error: "Failed to verify submission" });
     }
   });

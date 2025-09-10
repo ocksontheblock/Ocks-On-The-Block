@@ -156,6 +156,12 @@ export async function seedInitialData() {
 
     console.log("✅ Initial data seeded successfully!");
   } catch (error) {
-    console.error("❌ Error seeding data:", error);
+    console.error({
+      level: "error",
+      message: "Error seeding initial data",
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    });
   }
 }

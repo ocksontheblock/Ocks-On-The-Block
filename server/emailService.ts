@@ -181,6 +181,17 @@ Unsubscribe: ${unsubscribeUrl}
 };
 
 // Send welcome email
+// Utility function for safe error logging
+function logError(message: string, error: unknown) {
+  console.error({
+    level: "error",
+    message,
+    error: error instanceof Error ? error.message : String(error),
+    stack: error instanceof Error ? error.stack : undefined,
+    timestamp: new Date().toISOString()
+  });
+}
+
 export async function sendWelcomeEmail(email: string, signupId: number) {
   try {
     const unsubscribeUrl = `${process.env.FRONTEND_URL || 'https://your-domain.com'}/unsubscribe?token=${Buffer.from(`${signupId}:${email}`).toString('base64')}`;
@@ -198,7 +209,7 @@ export async function sendWelcomeEmail(email: string, signupId: number) {
     console.log(`Welcome email sent successfully to ${email}`);
     return true;
   } catch (error) {
-    console.error('Error sending welcome email:', error);
+    logError('Error sending welcome email', error);
     return false;
   }
 }
@@ -210,7 +221,7 @@ export async function verifyEmailConfig() {
     console.log('Email server is ready to send emails');
     return true;
   } catch (error) {
-    console.error('Email server verification failed:', error);
+    logError('Email server verification failed', error);
     return false;
   }
 }
