@@ -389,6 +389,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const cartData = insertCartItemSchema.parse(req.body);
       
+      // Validate quantity
+      const quantity = cartData.quantity || 1;
+      if (typeof quantity !== 'number' || quantity <= 0 || quantity > 99) {
+        return res.status(400).json({ "error": "Invalid quantity" });
+      }
+      
       // Check if item already in cart
       const [existingItem] = await db
         .select()
@@ -400,9 +406,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       if (existingItem) {
         // Update quantity
+        const newQuantity = (existingItem.quantity || 0) + quantity;
+        if (newQuantity > 99) {
+          return res.status(400).json({ "error": "Invalid quantity" });
+        }
+        
         const [updatedItem] = await db
           .update(cartItems)
-          .set({ quantity: (existingItem.quantity || 0) + (cartData.quantity || 1) })
+          .set({ quantity: newQuantity })
           .where(eq(cartItems.id, existingItem.id))
           .returning();
         
@@ -420,6 +431,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const id = parseInt(req.params.id);
       const { quantity } = req.body;
+      
+      // Validate quantity
+      if (typeof quantity !== 'number' || quantity <= 0 || quantity > 99) {
+        return res.status(400).json({ "error": "Invalid quantity" });
+      }
       
       const [updatedItem] = await db
         .update(cartItems)
