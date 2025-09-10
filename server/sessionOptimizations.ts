@@ -122,6 +122,11 @@ export const batchEmailProcessor = new BatchEmailProcessor();
 
 // Database connection monitoring for scaling
 export function monitorDatabasePerformance() {
+  // Skip monitoring in serverless environments like Vercel
+  if (process.env.VERCEL) {
+    return;
+  }
+  
   setInterval(() => {
     // Log memory usage
     const memUsage = process.memoryUsage();
@@ -146,5 +151,7 @@ function cleanupUserCache() {
   }
 }
 
-// Run cleanup every 5 minutes
-setInterval(cleanupUserCache, 5 * 60 * 1000);
+// Run cleanup every 5 minutes (skip in serverless environments)
+if (!process.env.VERCEL) {
+  setInterval(cleanupUserCache, 5 * 60 * 1000);
+}
