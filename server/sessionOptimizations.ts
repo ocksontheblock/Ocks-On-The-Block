@@ -121,3 +121,15 @@ export function monitorDatabasePerformance() {
     }
   }, 60000); // Check every minute
 }
+
+// Cleanup expired users from cache to prevent memory leaks
+function cleanupUserCache() {
+  for (const [userId, cached] of userCache.entries()) {
+    if (cached.expires < Date.now()) {
+      userCache.delete(userId);
+    }
+  }
+}
+
+// Run cleanup every 5 minutes
+setInterval(cleanupUserCache, 5 * 60 * 1000);
