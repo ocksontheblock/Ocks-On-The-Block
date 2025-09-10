@@ -4,6 +4,12 @@ import { setupVite, serveStatic, log } from "./vite";
 import { seedInitialData } from "./seedData";
 
 const app = express();
+
+// CRITICAL: Raw body parsing for Stripe webhooks MUST come before express.json()
+// Stripe requires the raw request body as Buffer for signature verification
+app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }));
+
+// Standard JSON parsing for all other routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -46,8 +52,10 @@ app.use((req, res, next) => {
     const startupTimeout = process.env.VERCEL ? 30000 : 60000; // 30s for Vercel, 60s for others
     
     const startupPromise = (async () => {
-      // Seed initial data on startup
-      await seedInitialData();
+      // Seed initial data on startup (skip in serverless to prevent cold start latency)
+      if (!process.env.VERCEL) {
+        await seedInitialData();
+      }
       
       const server = await registerRoutes(app);
 
