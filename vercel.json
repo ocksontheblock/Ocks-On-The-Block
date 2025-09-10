@@ -1,1 +1,5 @@
-{}
+{
+  "buildCommand": "npm install --production=false && npm run build",
+  "framework": null,
+  "installCommand": "npm install --production=false"
+}
