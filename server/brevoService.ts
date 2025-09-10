@@ -203,7 +203,7 @@ You're in the hunt because you signed up. Time to make NYC history. 🏆
           LASTNAME: lastName,
         },
         // Add to your scavenger hunt contact list (you'll need to create this list in Brevo)
-        // listIds: [1] // Replace with your actual Brevo list ID
+        listIds: [1] // Replace 1 with the actual Brevo list ID
       };
 
       return await this.addContact(contact);
