@@ -23,14 +23,18 @@ export default function Footer() {
             Contact Us
           </a>
           <a 
-            href="#"
+            href="https://instagram.com/ocksontheblock"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-300 hover:text-ock-orange transition-colors duration-300"
           >
             <Instagram size={18} />
             Instagram
           </a>
           <a 
-            href="#"
+            href="https://tiktok.com/@ocksontheblock"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 text-gray-300 hover:text-ock-orange transition-colors duration-300"
           >
             <SiTiktok size={18} />
