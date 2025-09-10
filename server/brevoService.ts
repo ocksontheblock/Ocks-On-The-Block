@@ -52,7 +52,13 @@ class BrevoService {
     try {
       return await this.makeRequest('/contacts', 'POST', contact);
     } catch (error) {
-      console.error('Error adding contact to Brevo:', error);
+      console.error({
+        level: "error",
+        message: "Error adding contact to Brevo",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       throw error;
     }
   }
@@ -61,7 +67,13 @@ class BrevoService {
     try {
       return await this.makeRequest('/smtp/email', 'POST', emailData);
     } catch (error) {
-      console.error('Error sending transactional email:', error);
+      console.error({
+        level: "error",
+        message: "Error sending transactional email",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       throw error;
     }
   }
@@ -171,7 +183,13 @@ You're in the hunt because you signed up. Time to make NYC history. 🏆
 
       return await this.sendTransactionalEmail(emailData);
     } catch (error) {
-      console.error('Error sending scavenger hunt welcome email:', error);
+      console.error({
+        level: "error",
+        message: "Error sending scavenger hunt welcome email",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       throw error;
     }
   }
@@ -190,7 +208,13 @@ You're in the hunt because you signed up. Time to make NYC history. 🏆
 
       return await this.addContact(contact);
     } catch (error) {
-      console.error('Error adding scavenger hunt contact:', error);
+      console.error({
+        level: "error",
+        message: "Error adding scavenger hunt contact",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       throw error;
     }
   }

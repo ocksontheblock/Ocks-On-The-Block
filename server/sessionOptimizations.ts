@@ -98,7 +98,13 @@ export class BatchEmailProcessor {
         console.log(`Processing ${emails.length} emails of type: ${type}`);
       }
     } catch (error) {
-      console.error('Batch email processing error:', error);
+      console.error({
+        level: "error",
+        message: "Batch email processing error",
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       // Re-queue failed emails
       this.emailQueue.unshift(...batch);
     }
