@@ -1,7 +1,11 @@
 {
-  "buildCommand": "npm install --production=false && npm run build",
-  "framework": null,
-  "installCommand": "npm install --production=false",
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
   "functions": {
     "dist/index.js": {
       "runtime": "nodejs20.x"
@@ -16,6 +20,5 @@
       "src": "/(.*)",
       "dest": "/dist/public/$1"
     }
-  ],
-  "outputDirectory": "dist"
+  ]
 }
