@@ -1,20 +1,17 @@
 {
-  "version": 2,
-  "buildCommand": "vite build",
-  "outputDirectory": "dist/public",
   "functions": {
     "api/*.js": {
       "runtime": "nodejs20.x"
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.js"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
