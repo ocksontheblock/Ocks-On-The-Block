@@ -7,10 +7,11 @@ let stripe: Stripe | null = null;
 
 function getStripe(): Stripe {
   if (!stripe) {
-    if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+    const secretKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET || 'sk_test_placeholder';
+    if (!secretKey || secretKey === 'sk_test_placeholder') {
+      console.warn('Using placeholder Stripe key - set STRIPE_SECRET_KEY environment variable for production');
     }
-    stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    stripe = new Stripe(secretKey);
   }
   return stripe;
 }
