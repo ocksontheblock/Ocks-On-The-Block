@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { db } from "../../server/db";
 import { users, loginUserSchema } from "../../shared/schema";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { cacheUser } from "../../server/sessionOptimizations";
 import { setCorsHeaders, logError, checkRateLimit, parseJsonBody } from "../_utils";
 
@@ -37,7 +37,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .from(users)
       .where(eq(users.email, loginData.email));
     
-    if (!user || !await bcrypt.compare(loginData.password, user.password)) {
+    if (!user || !await bcryptjs.compare(loginData.password, user.password)) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
     
