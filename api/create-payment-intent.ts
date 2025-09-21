@@ -29,6 +29,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Check if we have real Stripe credentials
+    const secretKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET;
+    if (!secretKey || secretKey === 'sk_test_placeholder') {
+      return res.status(501).json({ 
+        error: "Payment processing not configured", 
+        message: "Set STRIPE_SECRET_KEY environment variable to enable payments" 
+      });
+    }
+
     const body = await parseJsonBody(req);
     const { amount, currency = 'usd', metadata = {} } = body;
     
