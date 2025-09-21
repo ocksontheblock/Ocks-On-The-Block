@@ -1,29 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { db } from "../../server/db";
-import { cartItems } from "../../shared/schema";
+import { db } from "../../../../server/db";
+import { cartItems } from "../../../../shared/schema";
 import { eq } from "drizzle-orm";
-
-// Utility function for safe error logging
-function logError(message: string, error: unknown) {
-  console.error({
-    level: "error",
-    message,
-    error: error instanceof Error ? error.message : String(error),
-    stack: error instanceof Error ? error.stack : undefined,
-    timestamp: new Date().toISOString()
-  });
-}
+import { setCorsHeaders, logError, parseJsonBody } from "../../../_utils";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers - fix credentials issue
-  const origin = req.headers.origin;
-  if (origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-  }
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'PUT,DELETE,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  setCorsHeaders(req, res, 'PUT,DELETE,OPTIONS');
   
   if (req.method === 'OPTIONS') {
     res.status(200).end();
@@ -40,7 +22,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     if (req.method === 'PUT') {
       // Update cart item quantity
-      const { quantity } = req.body;
+      const body = await parseJsonBody(req);
+      const { quantity } = body;
       
       if (typeof quantity !== 'number' || quantity <= 0 || quantity > 99) {
         return res.status(400).json({ error: "Invalid quantity" });
