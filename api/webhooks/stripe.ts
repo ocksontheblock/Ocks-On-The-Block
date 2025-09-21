@@ -65,16 +65,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     
     try {
       // Verify webhook signature
-      const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || process.env.STRIPE_ENDPOINT_SECRET || 'whsec_placeholder';
-      if (!endpointSecret || endpointSecret === 'whsec_placeholder') {
-        console.warn('Using placeholder webhook secret - set STRIPE_WEBHOOK_SECRET environment variable for production');
-        // In development/placeholder mode, skip signature verification
+      const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || process.env.STRIPE_ENDPOINT_SECRET;
+      
+      if (!endpointSecret) {
+        // In production, require webhook secret
+        if (process.env.NODE_ENV === 'production') {
+          throw new Error('STRIPE_WEBHOOK_SECRET is required in production');
+        }
+        
+        // In development/testing, allow placeholder mode with warning
+        console.warn('Development mode: Skipping webhook signature verification - set STRIPE_WEBHOOK_SECRET for production');
         event = JSON.parse(rawBody.toString()) as Stripe.Event;
       } else {
         event = getStripe().webhooks.constructEvent(rawBody, signature as string, endpointSecret);
       }
-
-      event = getStripe().webhooks.constructEvent(rawBody, signature as string, endpointSecret);
     } catch (err) {
       logError(`Webhook signature verification failed`, err);
       return res.status(400).json({ error: `Webhook Error: ${err instanceof Error ? err.message : 'Unknown error'}` });
