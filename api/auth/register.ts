@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { db } from "../../server/db";
 import { users, insertUserSchema } from "../../shared/schema";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import { sanitizeUserInput, validatePasswordStrength } from "../../server/securityMiddleware";
 import { cacheUser } from "../../server/sessionOptimizations";
 import { setCorsHeaders, logError, checkRateLimit, parseJsonBody } from "../_utils";
@@ -59,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (userData.lastName) userData.lastName = sanitizeUserInput(userData.lastName);
     
     // Hash password
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = await bcryptjs.hash(userData.password, 10);
     userData.password = hashedPassword;
     
     const [user] = await db.insert(users).values(userData).returning();
