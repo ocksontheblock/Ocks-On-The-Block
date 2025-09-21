@@ -29,6 +29,29 @@ app.use((req, res, next) => {
   next();
 });
 
+// Development API proxy - in development mode, proxy API calls to serverless function logic
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+app.get("/api/mystery-boxes", async (req, res) => {
+  try {
+    // Import here to avoid issues if modules aren't available
+    const { db } = await import("./db");
+    const { mysteryBoxes } = await import("../shared/schema");
+    
+    const boxes = await db.select().from(mysteryBoxes);
+    res.json({ mysteryBoxes: boxes });
+  } catch (error) {
+    console.error("Mystery boxes error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 (async () => {
   try {
     // Only run in development (not on Vercel)

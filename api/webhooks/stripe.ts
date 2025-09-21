@@ -25,12 +25,8 @@ function getStripe(): Stripe {
   return stripe;
 }
 
-// Configure for Vercel Functions - disable body parsing for raw body access
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
+// Note: bodyParser config is not needed for @vercel/node functions
+// Raw body is read manually below for Stripe signature verification
 
 // Helper to read raw body
 async function getRawBody(req: VercelRequest): Promise<Buffer> {
